@@ -7,9 +7,15 @@
     "sourceMap": true,
     "outDir": "dist",
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "."
   },
+
   "lib": ["es2015"],
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "types/**/*.d.ts"], // Adjusted include path
+  "ts-node": {
+    "files": true
+  },
+  "files": ["src/types/user.d.ts"],
   "exclude": ["node_modules"]
 }
