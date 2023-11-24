@@ -24,13 +24,13 @@ class userController {
       res.sendStatus(405);
     }
   }
-  getUser(req: Request, res: Response) {
+  async getUser(req: Request, res: Response) {
     if (req.method === 'GET') {
       try {
         const userID = req.params['id'] as string | null;
 
         if (userID?.length) {
-          const user = new UserModel().findUser(Number(userID));
+          const user = await new UserModel().findUser(Number(userID));
           if (!user) {
             res.sendStatus(404);
           }
