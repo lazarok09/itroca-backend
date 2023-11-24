@@ -1,21 +1,19 @@
 import { Request, Response } from 'express';
 
 import { prismaClient } from '../../database/connect';
+import UserModel from 'src/models/user';
+import { generateRandomNumber } from 'src/utils/generic';
 
 export const userController = async (req: Request, res: Response) => {
   // receive the request
   if (req.method === 'POST') {
-    const numeroAleatorio = Math.random() * 1000 * Math.random();
+    const numeroAleatorio = generateRandomNumber();
     try {
-      const user = await (
-        await prismaClient()
-      ).user.create({
-        data: {
-          address: `${numeroAleatorio} endereço`,
-          age: 12 + numeroAleatorio,
-          email: `Email${numeroAleatorio}@gmail.com`,
-          name: `George${numeroAleatorio}`,
-        },
+      const user = new UserModel().createUser({
+        address: `Avenida Paulista nº${numeroAleatorio}`,
+        age: numeroAleatorio,
+        email: `testuser${numeroAleatorio}@hotmail.com`,
+        name: `testuser${numeroAleatorio}`,
       });
       res.status(200).send(user);
     } catch (e) {
@@ -24,15 +22,9 @@ export const userController = async (req: Request, res: Response) => {
   }
   if (req.method === 'GET') {
     try {
-      const userID = req.params['id'] as string | null;
-      if (userID?.length) {
-        const user = await (
-          await prismaClient()
-        ).user.findUnique({
-          where: {
-            id: Number(userID),
-          },
-        });
+      const userID = Number(req.params['id'] as string | null);
+      if (userID) {
+        const user = new UserModel().findUser(userID);
 
         res.status(200).send(user);
       } else {
