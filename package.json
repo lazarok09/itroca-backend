@@ -9,6 +9,10 @@
     "start": "tsc && node dist/app.js",
     "dev": "nodemon --require tsconfig-paths/register"
   },
+  "engines": {
+    "node": "v20.9.0",
+    "npm": "10.1.0"
+  },
   "private": "true",
   "devDependencies": {
     "@types/express": "^4.17.21",
