@@ -5,20 +5,17 @@ import { UserModel } from '../../models/user';
 
 class userController {
   // receive the request
-  createUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     if (req.method === 'POST') {
       const numeroAleatorio = generateRandomNumber();
       try {
-        const user = new UserModel().createUser({
+        const user = await new UserModel().createUser({
           address: `Avenida Paulista nº${numeroAleatorio}`,
           age: numeroAleatorio,
           email: `testuser${numeroAleatorio}@hotmail.com`,
           name: `testuser${numeroAleatorio}`,
         });
-        console.log(
-          '🚀 ~ file: index.ts:18 ~ userController ~ user ~ user:',
-          user,
-        );
+
         res.status(200).send(user);
       } catch (e) {
         res.sendStatus(400);
