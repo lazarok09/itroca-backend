@@ -2,6 +2,7 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { authController } from './controllers/auth';
+import { prismaClient } from './database/connect';
 
 const app = express();
 
@@ -47,8 +48,24 @@ app.use('/auth', express.urlencoded({ extended: true }));
 // Routes
 app.use('/auth', authController);
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
+app.get('/', async (req, res) => {
+  try {
+    (await prismaClient()).user.create({
+      data: {
+        address: 'Primeiro endereço',
+        age: 12,
+        email: 'Email@gmail.com',
+        name: 'George',
+      },
+    });
+  } catch (e) {
+    console.log('🚀 ~ file: app.ts:63 ~ app.get ~ e:', e);
+  }
+
+  const george = await (await prismaClient()).user.findMany();
+  console.log('🚀 ~ file: app.ts:63 ~ app.get ~ george:', george);
+
+  res.send(`Hello World ${JSON.stringify(george, null, 2)}`);
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

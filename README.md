@@ -28,4 +28,7 @@ To start the compiler process and run the server
     yarn start
 ```
 
-##
+## Prisma docs
+
+- How to connect a migration to database and create a model there
+  https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/using-prisma-migrate-typescript-postgresql
