@@ -49,21 +49,16 @@ app.use('/auth', express.urlencoded({ extended: true }));
 app.use('/auth', authController);
 
 app.get('/', async (req, res) => {
-  try {
-    (await prismaClient()).user.create({
-      data: {
-        address: 'Primeiro endereço',
-        age: 12,
-        email: 'Email@gmail.com',
-        name: 'George',
-      },
-    });
-  } catch (e) {
-    console.log('🚀 ~ file: app.ts:63 ~ app.get ~ e:', e);
-  }
+  const response = await (await prismaClient()).user.create({
+    data: {
+      address: 'Primeiro endereço',
+      age: 12,
+      email: 'Email@gmail.com',
+      name: 'George',
+    },
+  });
 
   const george = await (await prismaClient()).user.findMany();
-  console.log('🚀 ~ file: app.ts:63 ~ app.get ~ george:', george);
 
   res.send(`Hello World ${JSON.stringify(george, null, 2)}`);
 });
