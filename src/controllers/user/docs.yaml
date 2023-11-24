@@ -6,9 +6,20 @@ paths:
   /user:
     post:
       description: User handler to create random users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+
       responses:
         '200':
           description: Returns a User.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /user/{id}:
     get:
       description: User handler to get a user by ID
@@ -22,3 +33,21 @@ paths:
       responses:
         '200':
           description: Returns a User.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          required:
+            - 'false'
+        email:
+          type: string
+      example:
+        id: 1
+        email: testuser123@hotmail.com
