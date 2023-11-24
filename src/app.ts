@@ -55,8 +55,8 @@ app.use('/auth', express.urlencoded({ extended: true }));
 app.use('/auth', authController);
 
 app.use('/product', productController);
-app.use('/user/:id', userController.getUser);
-app.use('/user', userController.createUser);
+app.get('/user/:id', userController.getUser);
+app.post('/user', userController.createUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
