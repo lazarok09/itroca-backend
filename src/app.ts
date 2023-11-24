@@ -2,7 +2,8 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { authController } from './controllers/auth';
-import { prismaClient } from './database/connect';
+import { productController } from './controllers/product';
+import { userController } from './controllers/user';
 
 const app = express();
 
@@ -31,7 +32,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/controllers/**/*.ts'],
+  apis: ['./src/controllers/**/*.ts', "./src/controllers/**/*docs.yaml"],
 };
 
 const specs = swaggerJsdoc(options);
@@ -48,20 +49,15 @@ app.use('/auth', express.urlencoded({ extended: true }));
 // Routes
 app.use('/auth', authController);
 
-app.get('/', async (req, res) => {
-  const response = await (await prismaClient()).user.create({
-    data: {
-      address: 'Primeiro endereço',
-      age: 12,
-      email: 'Email@gmail.com',
-      name: 'George',
-    },
-  });
+app.use('/product', productController);
+app.use('/user', userController);
 
-  const george = await (await prismaClient()).user.findMany();
-
-  res.send(`Hello World ${JSON.stringify(george, null, 2)}`);
+app.get('/', async (_, res) => {
+  res.send(
+    'Welcome to the API, access <a href="http://localhost:3000/api-docs">documentação</a> to more details.',
+  );
 });
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

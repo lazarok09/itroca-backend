@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  version: 1.0.0
+paths:
+  /auth:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: string
+                  example: testuser@hotmail.com
+                password:
+                  type: string
+                  format: string
+                  example: 123
+              required:
+                - email
+                - password
+      description: Auth handler to login / logout users
+      responses:
+        '200':
+          description: Returns a mysterious string.

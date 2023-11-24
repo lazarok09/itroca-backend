@@ -1,0 +1,11 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+paths:
+  /product:
+    get:
+      description: Product handler to get products
+      responses:
+        '200':
+          description: Returns a product.

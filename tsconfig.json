@@ -12,7 +12,7 @@
   },
 
   "lib": ["es2015"],
-  "include": ["src/**/*.ts", "types/**/*.d.ts"], // Adjusted include path
+  "include": ["src/**/*.ts", "types/**/*.d.ts", "src/**/**/*.ts"], // Adjusted include path
   "ts-node": {
     "files": true
   },
