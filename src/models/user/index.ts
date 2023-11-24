@@ -23,7 +23,7 @@ class UserModel implements IUserModel {
   async findUser(id: number): Promise<User | undefined> {
     const searchedUser = await (
       await prismaClient()
-    ).user.findUnique({
+    ).user.findFirst({
       where: {
         id,
       },

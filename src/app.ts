@@ -3,7 +3,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { authController } from './controllers/auth';
 import { productController } from './controllers/product';
-import { userController } from './controllers/user';
+import userController from './controllers/user';
 
 const app = express();
 
@@ -32,7 +32,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/controllers/**/*.ts', "./src/controllers/**/*docs.yaml"],
+  apis: ['./src/controllers/**/*.ts', './src/controllers/**/*docs.yaml'],
 };
 
 const specs = swaggerJsdoc(options);
@@ -41,7 +41,12 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(specs, { explorer: true }),
 );
-
+// Welcome route
+app.get('/', async (_, res) => {
+  res.send(
+    'Welcome to the API, access <a href="http://localhost:3000/api-docs">documentação</a> to more details.',
+  );
+});
 // Middleware for parsing application/json and application/x-www-form-urlencoded
 app.use('/auth', express.json());
 app.use('/auth', express.urlencoded({ extended: true }));
@@ -50,13 +55,8 @@ app.use('/auth', express.urlencoded({ extended: true }));
 app.use('/auth', authController);
 
 app.use('/product', productController);
-app.use('/user', userController);
-
-app.get('/', async (_, res) => {
-  res.send(
-    'Welcome to the API, access <a href="http://localhost:3000/api-docs">documentação</a> to more details.',
-  );
-});
+app.use('/user/:id', userController.getUser);
+app.use('/user', userController.createUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
