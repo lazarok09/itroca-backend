@@ -2,17 +2,19 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
+
     "target": "es6",
-    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    
+    "moduleResolution": "node",
+    "baseUrl": "./src/"
   },
 
   "lib": ["es2015"],
-  "include": ["src/**/*.ts", "types/**/*.d.ts", "src/**/**/*.ts"], // Adjusted include path
+  "include": ["types/*.d.ts", "src/**/**/*.ts"], // Adjusted include path
   "ts-node": {
     "files": true
   },

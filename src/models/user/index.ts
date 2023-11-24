@@ -1,11 +1,11 @@
-import { prismaClient } from 'src/database/connect';
+import { prismaClient } from '../../database/connect';
 
 interface IUserModel {
   createUser: (user: Omit<User, 'id'>) => Promise<User>;
   findUser: (id: number) => Promise<User | undefined>;
 }
 
-export default class UserModel implements IUserModel {
+class UserModel implements IUserModel {
   async createUser(user: Omit<User, 'id'>): Promise<User> {
     const createdUser = await (
       await prismaClient()
@@ -33,3 +33,5 @@ export default class UserModel implements IUserModel {
     }
   }
 }
+
+export { UserModel };

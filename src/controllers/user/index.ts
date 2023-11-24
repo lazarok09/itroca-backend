@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
+import { generateRandomNumber } from '../../utils/generic';
 
-import { prismaClient } from '../../database/connect';
-import UserModel from 'src/models/user';
-import { generateRandomNumber } from 'src/utils/generic';
+import { UserModel } from '../../models/user';
 
 export const userController = async (req: Request, res: Response) => {
   // receive the request
