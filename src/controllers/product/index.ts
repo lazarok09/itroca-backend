@@ -6,7 +6,7 @@ class ProductController {
 
   async getProducts(req: Request, res: Response) {
     try {
-      const products = await new ProductModel().getProducts(0, 100);
+      const products = await new ProductModel().getProducts();
       res.status(200).send(products);
       return products;
     } catch (e) {

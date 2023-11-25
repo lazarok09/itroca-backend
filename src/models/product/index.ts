@@ -2,10 +2,7 @@ import { prismaClient } from '../../database/connect';
 
 interface IProduct {
   getProduct: (id: number) => Promise<Product | undefined>;
-  getProducts: (
-    cursor: number,
-    limit: number,
-  ) => Promise<Product[] | undefined>;
+  getProducts: () => Promise<Product[] | undefined>;
   createProduct: (product: Omit<Product, 'id'>) => Promise<Product | undefined>;
 }
 class ProductModel implements IProduct {
@@ -35,13 +32,8 @@ class ProductModel implements IProduct {
       return createdProduct;
     }
   }
-  async getProducts(cursor: number, limit: number) {
-    const searchedProducts = await (
-      await prismaClient()
-    ).product.findMany({
-      skip: cursor,
-      take: limit,
-    });
+  async getProducts() {
+    const searchedProducts = await (await prismaClient()).product.findMany();
     if (searchedProducts) {
       return searchedProducts;
     }
