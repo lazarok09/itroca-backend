@@ -3,7 +3,7 @@ import { generateRandomNumber } from '../../utils/generic';
 
 import { UserModel } from '../../models/user';
 
-class userController {
+class UserController {
   // receive the request
   async createUser(req: Request, res: Response) {
     const numeroAleatorio = generateRandomNumber();
@@ -41,4 +41,4 @@ class userController {
     }
   }
 }
-export default new userController();
+export default new UserController();

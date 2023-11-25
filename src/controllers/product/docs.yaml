@@ -29,7 +29,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Product'
   /product:
     post:
       description: Register a product

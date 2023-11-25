@@ -5,3 +5,9 @@ interface User {
   age: number;
   address: string;
 }
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+}

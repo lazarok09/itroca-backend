@@ -2,8 +2,8 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { authController } from './controllers/auth';
-import { productController } from './controllers/product';
-import userController from './controllers/user';
+import ProductController from './controllers/product';
+import UserController from './controllers/user';
 
 const app = express();
 
@@ -48,15 +48,25 @@ app.get('/', async (_, res) => {
   );
 });
 // Middleware for parsing application/json and application/x-www-form-urlencoded
+
+// Auth
 app.use('/auth', express.json());
 app.use('/auth', express.urlencoded({ extended: true }));
-
-// Routes
 app.use('/auth', authController);
 
-app.use('/product', productController);
-app.get('/user/:id', userController.getUser);
-app.post('/user', userController.createUser);
+// Product's
+
+app.get('/products', ProductController.getProducts);
+app.use('/product', express.json());
+app.use('/product', express.urlencoded({ extended: true }));
+app.post('/product', ProductController.createProduct);
+
+app.get('/product/:id', ProductController.getProduct);
+
+// USER
+app.get('/user/:id', UserController.getUser);
+
+app.post('/user', UserController.createUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
