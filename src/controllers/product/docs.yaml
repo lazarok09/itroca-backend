@@ -3,9 +3,66 @@ info:
   title: Product API
   version: 1.0.0
 paths:
-  /product:
+  /product/{id}:
+    get:
+      description: Product handler to get products
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: The product id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Returns a product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /products:
     get:
       description: Product handler to get products
       responses:
         '200':
           description: Returns a product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /product:
+    post:
+      description: Register a product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              id: 1,
+              name: Iphone 15 Pro max
+              price: 4999.90
+              image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
+
+      responses:
+        '200':
+          description: Returns a product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          required:
+            - 'name'
+        price:
+          type: integer
+        image:
+          type: string
