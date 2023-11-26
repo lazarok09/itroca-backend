@@ -3,7 +3,7 @@ info:
   title: Authentication API
   version: 1.0.0
 paths:
-  /auth:
+  /auth/signin:
     post:
       requestBody:
         required: true
@@ -26,4 +26,77 @@ paths:
       description: Auth handler to login / logout users
       responses:
         '200':
-          description: Returns a mysterious string.
+          description: Returns a user and a token string.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                properties:
+                  token: string
+  /auth/signout:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: integer
+                  example: 1
+
+              required:
+                - id
+      description: Auth handler to log out user
+      responses:
+        '200':
+          description: Returns a boolean.
+  /auth/signup:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                 name:
+                  type: string
+                  
+                 email:
+                  type: string
+                 age:
+                  type: integer
+                 address:
+                  type: string
+                  required: 
+                    - name
+                    - email
+                    - age
+                    - address
+            
+      description: Auth handler to register user
+      responses:
+        '200':
+          description: Returns a user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        address:
+          type: string

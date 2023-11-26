@@ -50,7 +50,9 @@ app.get('/', async (_, res) => {
 // Auth
 app.use('/auth', express.json());
 app.use('/auth', express.urlencoded({ extended: true }));
-app.post('/auth', AuthController.login);
+app.post('/auth/signin', AuthController.signIn);
+app.post('/auth/signout', AuthController.signOff);
+app.post('/auth/signup', AuthController.signUp);
 
 // User
 app.get('/user/:id', UserController.getUser);

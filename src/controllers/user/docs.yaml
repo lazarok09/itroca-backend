@@ -44,10 +44,11 @@ components:
       properties:
         id:
           type: integer
-          required:
-            - 'false'
+        name:
+          type: string
         email:
           type: string
-      example:
-        id: 1
-        email: testuser123@hotmail.com
+        age:
+          type: integer
+        address:
+          type: string
