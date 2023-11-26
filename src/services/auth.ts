@@ -7,7 +7,7 @@ export const authenticateUser = async ({
 }: {
   email: string;
   password: string;
-}) => {
+}): Promise<User> => {
   // comunicate with the model responsive
   return await new Promise((resolve, reject) => {
     if (!email?.length || !password?.length) {
@@ -16,7 +16,13 @@ export const authenticateUser = async ({
       });
     }
     // do the database resolution with models
-    
-    resolve({ address: 'Rua 123', age: 14, name: 'Jhonatam' });
+
+    resolve({
+      address: 'Rua 123',
+      age: 14,
+      name: 'Jhonatam',
+      email: 'age123@gmail.com',
+      id: 1,
+    });
   });
 };

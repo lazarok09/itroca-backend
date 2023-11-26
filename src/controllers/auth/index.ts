@@ -1,24 +1,21 @@
 import { Request, Response } from 'express';
-import { authenticateUser } from '../../services/auth';
+import { AuthModel } from '../../models/auth';
 
-
-export const authController = async (req: Request, res: Response) => {
+class AuthController {
   // receive the request
-  if (req.method === 'POST') {
+  async login(req: Request, res: Response) {
     try {
       const email = req?.body?.email;
+      console.log("🚀 ~ file: index.ts:9 ~ AuthController ~ login ~ email:", email)
       const password = req?.body?.password;
+      console.log("🚀 ~ file: index.ts:11 ~ AuthController ~ login ~ password:", password)
       // do business logic here
-      await authenticateUser({
-        email,
-        password,
-      });
+      const result = await new AuthModel().authorize(email, password);
       res.status(200);
-      res.send('Sucesso');
+      res.send(`Sucesso: ${result}`);
     } catch (e) {
-      res.sendStatus(400);
+      res.status(400).send('Ocorreu um erro durante o login do usuário');
     }
-  } else {
-    res.sendStatus(405);
   }
-};
+}
+export default new AuthController();

@@ -1,6 +1,9 @@
 import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import AuthController from './controllers/auth';
+import ProductController from './controllers/product';
+import UserController from './controllers/user';
 
 const app = express();
 
@@ -25,7 +28,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: 'http://localhost:4000',
       },
     ],
   },
@@ -44,6 +47,23 @@ app.get('/', async (_, res) => {
     'Welcome to the API, access <a href="http://localhost:3000/api-docs">documentação</a> to more details.',
   );
 });
+// Auth
+app.use('/auth', express.json());
+app.use('/auth', express.urlencoded({ extended: true }));
+app.post('/auth', AuthController.login);
+
+// User
+app.get('/user/:id', UserController.getUser);
+app.post('/user', UserController.createUser);
+
+// Product
+app.get('/product/:id', ProductController.getProduct);
+app.use('/product', express.json());
+app.use('/product', express.urlencoded({ extended: true }));
+app.post('/product', ProductController.createProduct);
+
+// Products
+app.get('/products', ProductController.getProducts);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
