@@ -32,6 +32,11 @@ paths:
                 type: array
                 items: 
                   $ref: '#/components/schemas/User'
+    delete:
+      description: User handler to delete all users
+      responses:
+        '200':
+          description: Delete the users.
   /user/{id}:
     get:
       description: User handler to get a user by ID

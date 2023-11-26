@@ -2,7 +2,9 @@ import { prismaClient } from '../../database/connect';
 
 interface IUserModel {
   createUser: (user: Omit<User, 'id'>) => Promise<User>;
+  findUsers: () => Promise<User[] | undefined>;
   findUser: (id: number) => Promise<User | undefined>;
+  deleteUsers: () => Promise<Number | undefined>;
 }
 
 class UserModel implements IUserModel {
@@ -36,6 +38,12 @@ class UserModel implements IUserModel {
     const searchedUsers = await (await prismaClient()).user.findMany();
     if (searchedUsers) {
       return searchedUsers;
+    }
+  }
+  async deleteUsers(): Promise<Number | undefined> {
+    const deletedUsers = await (await prismaClient()).user.deleteMany();
+    if (deletedUsers.count) {
+      return deletedUsers.count;
     }
   }
 }
