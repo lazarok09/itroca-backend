@@ -1,6 +1,6 @@
 import { prismaClient } from '../../database/connect';
 import { UserModel } from '../../models/user';
-import { authenticateUser, signOffUser } from '../../services/auth';
+import { signOffUser } from '../../services/auth';
 import { comparePasswordHash } from '../../lib/bcrypt';
 interface SignUpModelProps extends Omit<User, 'id' | 'password' | 'hash'> {
   password: string;
