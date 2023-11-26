@@ -32,6 +32,12 @@ class UserModel implements IUserModel {
       return searchedUser;
     }
   }
+  async findUsers(): Promise<User[] | undefined> {
+    const searchedUsers = await (await prismaClient()).user.findMany();
+    if (searchedUsers) {
+      return searchedUsers;
+    }
+  }
 }
 
 export { UserModel };

@@ -22,7 +22,6 @@ class AuthController {
   async signOff(req: Request, res: Response) {
     try {
       const userId = req.body?.id;
-      console.log("🚀 ~ file: index.ts:25 ~ AuthController ~ signOff ~ userId:", userId)
       const result = await new AuthModel().signOut(userId);
       res.status(200).send(`Sucesso no log off: ${result}`);
     } catch (e) {

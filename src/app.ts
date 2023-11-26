@@ -58,6 +58,10 @@ app.post('/auth/signup', AuthController.signUp);
 app.get('/user/:id', UserController.getUser);
 app.post('/user', UserController.createUser);
 
+app.use('/users', express.json());
+app.use('/users', express.urlencoded({ extended: true }));
+app.get('/users', UserController.getUsers);
+
 // Product
 app.get('/product/:id', ProductController.getProduct);
 app.use('/product', express.json());

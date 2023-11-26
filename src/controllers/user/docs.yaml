@@ -20,6 +20,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /users:
+    get:
+      description: User handler to get all users
+      responses:
+        '200':
+          description: Returns a User.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
   /user/{id}:
     get:
       description: User handler to get a user by ID

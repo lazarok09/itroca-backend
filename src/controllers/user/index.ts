@@ -40,5 +40,16 @@ class UserController {
       res.status(400).send(`Ocorreu um erro durante a busca do usuário`);
     }
   }
+  async getUsers(req: Request, res: Response) {
+    try {
+      const users = await new UserModel().findUsers();
+      if (!users) {
+        res.sendStatus(404);
+      }
+      res.status(200).send(users);
+    } catch (e) {
+      res.status(400).send(`Ocorreu um erro durante a busca de usuários`);
+    }
+  }
 }
 export default new UserController();
