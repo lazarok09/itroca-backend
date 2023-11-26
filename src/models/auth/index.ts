@@ -1,17 +1,39 @@
+import { prismaClient } from '../../database/connect';
 import { UserModel } from '../../models/user';
 import { authenticateUser, signOffUser } from '../../services/auth';
+import { comparePasswordHash } from '../../lib/bcrypt';
+interface SignUpModelProps extends Omit<User, 'id' | 'password' | 'hash'> {
+  password: string;
+}
 interface IAuthModel {
-  signIn: (email: string, password: string) => Promise<User>;
+  signIn: (email: string, password: string) => Promise<User | undefined>;
   signOut: (id: number) => Promise<Boolean>;
-  signUp: ({ address, age, email }: Omit<User, 'id'>) => Promise<User>;
+  signUp: (props: SignUpModelProps) => Promise<Omit<User, 'hash'>>;
 }
 
 class AuthModel implements IAuthModel {
   async signIn(email: string, password: string) {
-    const result = await authenticateUser({ email, password });
+    const searchedUser = await (
+      await prismaClient()
+    ).user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (searchedUser) {
+      const isUserHashValid = await comparePasswordHash({
+        password: password,
+        hash: searchedUser.hash,
+      });
+
+      if (isUserHashValid) {
+        // create a JWT generator
+        return searchedUser;
+      }
+    }
     // authenticate this user in the server
     // return the token
-    return result;
   }
 
   async signOut(id: number) {
@@ -19,16 +41,18 @@ class AuthModel implements IAuthModel {
     // send to blacklist this user token
     return result;
   }
-  async signUp({ address, age, email, name }: Omit<User, 'id'>) {
+  async signUp({ address, age, email, name, password }: SignUpModelProps) {
     // create user
     const result = await new UserModel().createUser({
       email,
       address,
       age,
       name,
+      password,
     });
     // authenticate this user in the server
     // return the user and the token
+
     return result;
   }
 }

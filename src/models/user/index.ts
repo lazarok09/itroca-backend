@@ -1,14 +1,19 @@
+import { generatePasswordHash } from '../../lib/bcrypt';
 import { prismaClient } from '../../database/connect';
 
 interface IUserModel {
-  createUser: (user: Omit<User, 'id'>) => Promise<User>;
+  createUser: (props: SignUp) => Promise<User>;
   findUsers: () => Promise<User[] | undefined>;
   findUser: (id: number) => Promise<User | undefined>;
   deleteUsers: () => Promise<Number | undefined>;
 }
-
+interface SignUp extends Omit<User, 'id' | 'hash'> {
+  password: string;
+}
 class UserModel implements IUserModel {
-  async createUser(user: Omit<User, 'id'>): Promise<User> {
+  async createUser(user: SignUp): Promise<User> {
+    const hash = await generatePasswordHash({ password: user.password });
+
     const createdUser = await (
       await prismaClient()
     ).user.create({
@@ -17,6 +22,7 @@ class UserModel implements IUserModel {
         age: user.age,
         email: user.email,
         name: user.name,
+        hash: hash,
       },
     });
 

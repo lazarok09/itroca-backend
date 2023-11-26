@@ -64,27 +64,29 @@ paths:
               properties: 
                  name:
                   type: string
-                  
                  email:
                   type: string
                  age:
                   type: integer
                  address:
                   type: string
+                 password: 
+                  type: string
                   required: 
                     - name
                     - email
                     - age
                     - address
+                    - password
             
       description: Auth handler to register user
       responses:
         '200':
-          description: Returns a user.
+          description: Returns a user with hash instead of plain text password.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserWithHash'
 components:
   schemas:
     User:
@@ -99,4 +101,19 @@ components:
         age:
           type: integer
         address:
+          type: string
+    UserWithHash:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        address:
+          type: string
+        hash:
           type: string

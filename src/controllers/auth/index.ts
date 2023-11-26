@@ -8,13 +8,17 @@ class AuthController {
       const email = req?.body?.email;
       const password = req?.body?.password;
 
-      if (!email?.length || password?.length) {
+      if (!email?.length || !password?.length) {
         res.status(400).send('Atributo email ou senha não especificados');
       }
       // do business logic here
       const result = await new AuthModel().signIn(email, password);
-      res.status(200);
-      res.send(`Sucesso: ${result}`);
+      if (result) {
+        res.status(200);
+        res.send(`Sucesso: ${result}`);
+      } else {
+        res.status(401).send(`Usuário ou senha incorretos`);
+      }
     } catch (e) {
       res.status(400).send('Ocorreu um erro durante o login do usuário');
     }
@@ -30,13 +34,14 @@ class AuthController {
   }
   async signUp(req: Request, res: Response) {
     try {
-      const user: User = req.body;
+      const user: User & { password: string } = req.body;
 
       if (
         !user.address?.length ||
         !user.name?.length ||
         !user.email?.length ||
-        !user.age
+        !user.age ||
+        !user.password?.length
       ) {
         res
           .status(400)
@@ -49,9 +54,10 @@ class AuthController {
         name: user.name,
         email: user.email,
         age: user.age,
+        password: user.password,
       });
 
-      res.status(200).send(`Sucesso no registro do usuário ${result.name}`);
+      res.status(200).send(result);
     } catch (e) {
       res
         .status(400)

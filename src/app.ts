@@ -52,11 +52,13 @@ app.use('/auth', express.json());
 app.use('/auth', express.urlencoded({ extended: true }));
 app.post('/auth/signin', AuthController.signIn);
 app.post('/auth/signout', AuthController.signOff);
+
+app.use('/auth/signup', express.json());
+app.use('/auth/signup', express.urlencoded({ extended: true }));
 app.post('/auth/signup', AuthController.signUp);
 
 // User
 app.get('/user/:id', UserController.getUser);
-app.post('/user', UserController.createUser);
 
 app.use('/users', express.json());
 app.use('/users', express.urlencoded({ extended: true }));

@@ -3,23 +3,6 @@ info:
   title: User API
   version: 1.0.0
 paths:
-  /user:
-    post:
-      description: User handler to create random users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-
-      responses:
-        '200':
-          description: Returns a User.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
   /users:
     get:
       description: User handler to get all users
@@ -30,7 +13,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/User'
     delete:
       description: User handler to delete all users
