@@ -7,7 +7,7 @@ import UserController from './controllers/user';
 
 const app = express();
 
-const port = 3000;
+const port = 4000;
 const options = {
   definition: {
     openapi: '3.1.0',
