@@ -9,17 +9,25 @@ class UserController {
       const userID = req.params['id'] as string | null;
 
       if (userID?.length) {
-        const user = await new UserModel().findUser(Number(userID));
-        if (!user) {
-          res.sendStatus(404);
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (token) {
+          const user = await new UserModel().findUser(Number(userID), token);
+
+          if (!user) {
+            res.status(404).send('Usuário não encontrado');
+          }
+
+          res.status(200).send(user);
+        } else {
+          res.status(401).send('Erro na captura do token');
         }
-        res.status(200).send(user);
       } else {
         res.status(400);
         res.send('Parametro obrigatório não especificado');
       }
     } catch (e) {
-      res.status(400).send(`Ocorreu um erro durante a busca do usuário`);
+      res.status(400).send(`Ocorreu um erro durante a busca do usuário: ${e}`);
     }
   }
   async getUsers(req: Request, res: Response) {

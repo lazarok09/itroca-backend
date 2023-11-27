@@ -2,6 +2,7 @@ import { prismaClient } from '../../database/connect';
 import { UserModel } from '../../models/user';
 import { signOffUser } from '../../services/auth';
 import { comparePasswordHash } from '../../lib/bcrypt';
+import { generateJWT } from '../../lib/jsonwebtoken';
 interface SignUpModelProps extends Omit<User, 'id' | 'password' | 'hash'> {
   password: string;
 }
@@ -29,7 +30,8 @@ class AuthModel implements IAuthModel {
 
       if (isUserHashValid) {
         // create a JWT generator
-        return searchedUser;
+        const token = generateJWT({ email });
+        return { ...searchedUser, token: token };
       }
     }
     // authenticate this user in the server

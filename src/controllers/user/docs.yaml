@@ -2,6 +2,27 @@ openapi: 3.0.0
 info:
   title: User API
   version: 1.0.0
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        address:
+          type: string
+
 paths:
   /users:
     get:
@@ -22,7 +43,10 @@ paths:
           description: Delete the users.
   /user/{id}:
     get:
+      security:
+        - bearerAuth: []
       description: User handler to get a user by ID
+
       parameters:
         - in: path
           name: id
@@ -37,18 +61,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-components:
-  schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        email:
-          type: string
-        age:
-          type: integer
-        address:
-          type: string

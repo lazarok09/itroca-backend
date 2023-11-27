@@ -15,7 +15,7 @@ class AuthController {
       const result = await new AuthModel().signIn(email, password);
       if (result) {
         res.status(200);
-        res.send(`Sucesso: ${result}`);
+        res.send(result);
       } else {
         res.status(401).send(`Usuário ou senha incorretos`);
       }
