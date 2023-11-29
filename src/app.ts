@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import AuthController from './controllers/auth';
 import ProductController from './controllers/product';
 import UserController from './controllers/user';
+import { authMiddleware } from './middlewares/auth';
 
 const app = express();
 
@@ -58,7 +59,7 @@ app.use('/auth/signup', express.urlencoded({ extended: true }));
 app.post('/auth/signup', AuthController.signUp);
 
 // User
-app.get('/user/:id', UserController.getUser);
+app.get('/user/:id', authMiddleware, UserController.getUser);
 
 app.use('/users', express.json());
 app.use('/users', express.urlencoded({ extended: true }));

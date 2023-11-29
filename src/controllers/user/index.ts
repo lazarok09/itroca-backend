@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../../models/user';
+import { CustomUserRequest } from '../../middlewares/definitions';
 
 class UserController {
   // receive the request
@@ -7,21 +8,19 @@ class UserController {
   async getUser(req: Request, res: Response) {
     try {
       const userID = req.params['id'] as string | null;
+      const customRequest: CustomUserRequest = req as any;
 
       if (userID?.length) {
-        const token = req.headers.authorization?.split(' ')[1];
+        const user = await new UserModel().findUser({
+          id: Number(userID),
+          user: customRequest?.user,
+        });
 
-        if (token) {
-          const user = await new UserModel().findUser(Number(userID), token);
-
-          if (!user) {
-            res.status(404).send('Usuário não encontrado');
-          }
-
-          res.status(200).send(user);
-        } else {
-          res.status(401).send('Erro na captura do token');
+        if (!user) {
+          res.status(404).send('Usuário não encontrado');
         }
+
+        res.status(200).send(user);
       } else {
         res.status(400);
         res.send('Parametro obrigatório não especificado');

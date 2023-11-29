@@ -13,10 +13,12 @@ export const generateJWT = ({ email }: { email: string }) => {
     throw new Error('Secret Key not provided');
   }
 };
-
+export type VerifyJWTResultDecoded = {
+  data: { email: string };
+};
 export const verifyJWT = ({ token }: { token: string }) => {
   if (SECRET_KEY) {
-    return new Promise<{ data: { email: string } }>((resolve, reject) => {
+    return new Promise<VerifyJWTResultDecoded>((resolve, reject) => {
       return jwt.verify(token, SECRET_KEY, (error, decoded: any) => {
         if (error) {
           console.error(`Erro  na verificação do JWT: ${error}`);
