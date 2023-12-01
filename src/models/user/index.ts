@@ -57,10 +57,6 @@ class UserModel implements IUserModel {
 
     if (searchedUser) {
       if (user && user.data.email === searchedUser.email) {
-        console.log(
-          '🚀 ~ file: index.ts:60 ~ UserModel ~ user.data:',
-          user.data,
-        );
         return searchedUser;
       } else {
         throw new Error('Erro durante a validação do JWT do usuário');
