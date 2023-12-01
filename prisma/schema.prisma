@@ -8,17 +8,29 @@ datasource db {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  email   String  @unique
-  name    String
-  age     Int
-  address String
-  hash String
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  age       Int
+  address   String
+  hash      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(USER)
+  Product   Product?
 }
 
 model Product {
-  id    Int    @id @default(autoincrement())
-  name  String
-  price Int
-  image String
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Int
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userID], references: [id])
+  userID Int @unique
+}
+
+enum Role {
+  USER
 }

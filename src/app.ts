@@ -68,9 +68,9 @@ app.delete('/users', UserController.deleteUsers);
 
 // Product
 app.get('/product/:id', ProductController.getProduct);
-app.use('/product', express.json());
-app.use('/product', express.urlencoded({ extended: true }));
-app.post('/product', ProductController.createProduct);
+app.use('/product', authMiddleware, express.json());
+app.use('/product', authMiddleware, express.urlencoded({ extended: true }));
+app.post('/product', authMiddleware, ProductController.createProduct);
 
 // Products
 app.get('/products', ProductController.getProducts);

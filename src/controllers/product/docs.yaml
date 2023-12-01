@@ -41,7 +41,6 @@ paths:
             schema:
               $ref: '#/components/schemas/Product'
             example:
-              id: 1,
               name: Iphone 15 Pro max
               price: 4999.90
               image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp

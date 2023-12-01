@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductModel } from '../../models/product';
+import { CustomUserRequest } from '../../types/request';
 
 class ProductController {
   // receive the request
@@ -30,12 +31,16 @@ class ProductController {
   }
   async createProduct(req: Request, res: Response) {
     try {
-      const requestBody: Product = req.body;
+      const customRequest: CustomUserRequest = req as any;
+      const requestBody: Product = customRequest.body;
 
       const product = await new ProductModel().createProduct({
-        image: requestBody.image,
-        name: requestBody.name,
-        price: Number(requestBody.price),
+        product: {
+          image: requestBody.image,
+          name: requestBody.name,
+          price: Number(requestBody.price),
+        },
+        userID: customRequest.user.data.id,
       });
 
       res.status(200).send(product);

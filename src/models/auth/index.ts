@@ -3,7 +3,8 @@ import { UserModel } from '../../models/user';
 import { signOffUser } from '../../services/auth';
 import { comparePasswordHash } from '../../lib/bcrypt';
 import { generateJWT } from '../../lib/jsonwebtoken';
-interface SignUpModelProps extends Omit<User, 'id' | 'password' | 'hash'> {
+interface SignUpModelProps
+  extends Omit<User, 'id' | 'password' | 'hash' | 'createdAt' | 'updatedAt'> {
   password: string;
 }
 interface IAuthModel {
@@ -30,8 +31,18 @@ class AuthModel implements IAuthModel {
 
       if (isUserHashValid) {
         // create a JWT generator
-        const token = generateJWT({ email });
-        return { ...searchedUser, token: token };
+        const token = generateJWT({ email, id: searchedUser.id });
+        const user: User = {
+          address: searchedUser.address,
+          age: searchedUser.age,
+          createdAt: searchedUser.createdAt,
+          email: searchedUser.email,
+          id: searchedUser.id,
+          name: searchedUser.name,
+          updatedAt: searchedUser.updatedAt,
+        };
+
+        return { ...user, token: token };
       }
     }
     // authenticate this user in the server

@@ -1,6 +1,5 @@
 import { generatePasswordHash } from '../../lib/bcrypt';
 import { prismaClient } from '../../database/connect';
-import { VerifyJWTResultDecoded } from '../../lib/jsonwebtoken';
 
 interface IUserModel {
   createUser: (props: SignUp) => Promise<User>;
@@ -11,7 +10,7 @@ interface IUserModel {
   }) => Promise<User | undefined>;
   deleteUsers: () => Promise<Number | undefined>;
 }
-interface SignUp extends Omit<User, 'id' | 'hash'> {
+interface SignUp extends Omit<User, 'id' | 'hash' | 'createdAt' | 'updatedAt'> {
   password: string;
 }
 class UserModel implements IUserModel {
@@ -30,7 +29,16 @@ class UserModel implements IUserModel {
       },
     });
 
-    return createdUser;
+    return {
+      address: createdUser.address,
+      age: createdUser.age,
+      createdAt: createdUser.createdAt,
+      email: createdUser.email,
+      id: createdUser.id,
+      name: createdUser.name,
+      updatedAt: createdUser.updatedAt,
+      hash: hash,
+    };
   }
   async findUser({
     id,
@@ -39,7 +47,6 @@ class UserModel implements IUserModel {
     id: number;
     user: VerifyJWTResultDecoded;
   }): Promise<User | undefined> {
-    console.log('🚀 ~ file: index.ts:42 ~ UserModel ~ user:', user);
     const searchedUser = await (
       await prismaClient()
     ).user.findFirst({
@@ -50,12 +57,16 @@ class UserModel implements IUserModel {
 
     if (searchedUser) {
       if (user && user.data.email === searchedUser.email) {
+        console.log(
+          '🚀 ~ file: index.ts:60 ~ UserModel ~ user.data:',
+          user.data,
+        );
         return searchedUser;
       } else {
-        throw new Error('Erro durante a validação do usuário');
+        throw new Error('Erro durante a validação do JWT do usuário');
       }
     } else {
-      throw new Error('Erro durante a busca do usuário');
+      throw new Error('id de usuário não encontrado');
     }
   }
   async findUsers(): Promise<User[] | undefined> {

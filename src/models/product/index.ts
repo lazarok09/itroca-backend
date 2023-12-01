@@ -1,9 +1,12 @@
 import { prismaClient } from '../../database/connect';
-
+interface CreateProduct {
+  product: Pick<Product, 'image' | 'name' | 'price'>;
+  userID: number;
+}
 interface IProduct {
   getProduct: (id: number) => Promise<Product | undefined>;
   getProducts: () => Promise<Product[] | undefined>;
-  createProduct: (product: Omit<Product, 'id'>) => Promise<Product | undefined>;
+  createProduct: (props: CreateProduct) => Promise<Product | undefined>;
 }
 class ProductModel implements IProduct {
   async getProduct(id: number) {
@@ -18,7 +21,7 @@ class ProductModel implements IProduct {
       return product;
     }
   }
-  async createProduct(product: Omit<Product, 'id'>) {
+  async createProduct({ product, userID }: CreateProduct) {
     const createdProduct = await (
       await prismaClient()
     ).product.create({
@@ -26,6 +29,7 @@ class ProductModel implements IProduct {
         image: product.image,
         name: product.name,
         price: product.price,
+        userID: userID,
       },
     });
     if (createdProduct) {
