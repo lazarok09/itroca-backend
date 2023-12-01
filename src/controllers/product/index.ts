@@ -52,5 +52,17 @@ class ProductController {
     }
     res.sendStatus(400);
   }
+  async deleteProducts(req: Request, res: Response) {
+    try {
+      const deletedProductsCount = await new ProductModel().deleteProducts();
+
+      res.status(200).send(`Deleted ${deletedProductsCount} products`);
+    } catch (e) {
+      res
+        .status(400)
+        .send(`Ocorreu um erro ao apagar os produtos: ${e}`);
+    }
+    res.sendStatus(400);
+  }
 }
 export default new ProductController();

@@ -74,6 +74,7 @@ app.post('/product', authMiddleware, ProductController.createProduct);
 
 // Products
 app.get('/products', ProductController.getProducts);
+app.delete('/products', ProductController.deleteProducts);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

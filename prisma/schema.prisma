@@ -17,7 +17,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      Role     @default(USER)
-  Product   Product?
+  products  Product[]
 }
 
 model Product {
@@ -27,8 +27,8 @@ model Product {
   image     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user User @relation(fields: [userID], references: [id])
-  userID Int @unique
+  user      User     @relation(fields: [userID], references: [id])
+  userID    Int      @unique
 }
 
 enum Role {

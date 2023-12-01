@@ -2,6 +2,31 @@ openapi: 3.0.0
 info:
   title: Product API
   version: 1.0.0
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          required:
+            - 'name'
+        price:
+          type: integer
+        image:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
 paths:
   /product/{id}:
     get:
@@ -30,11 +55,24 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Product'
+    delete:
+      description: Delete all products
+      responses:
+        '200':
+          description: Returns boolean.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
   /product:
     post:
       description: Register a product
+      security:
+        - bearerAuth: []
+
       requestBody:
         content:
           application/json:
@@ -44,7 +82,6 @@ paths:
               name: Iphone 15 Pro max
               price: 4999.90
               image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
-
       responses:
         '200':
           description: Returns a product.
@@ -52,18 +89,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-components:
-  schemas:
-    Product:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          required:
-            - 'name'
-        price:
-          type: integer
-        image:
-          type: string

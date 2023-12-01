@@ -7,6 +7,7 @@ interface IProduct {
   getProduct: (id: number) => Promise<Product | undefined>;
   getProducts: () => Promise<Product[] | undefined>;
   createProduct: (props: CreateProduct) => Promise<Product | undefined>;
+  deleteProducts: () => Promise<number | undefined>;
 }
 class ProductModel implements IProduct {
   async getProduct(id: number) {
@@ -29,7 +30,9 @@ class ProductModel implements IProduct {
         image: product.image,
         name: product.name,
         price: product.price,
-        userID: userID,
+        user: {
+          connect: { id: userID },
+        },
       },
     });
     if (createdProduct) {
@@ -40,6 +43,12 @@ class ProductModel implements IProduct {
     const searchedProducts = await (await prismaClient()).product.findMany();
     if (searchedProducts) {
       return searchedProducts;
+    }
+  }
+  async deleteProducts() {
+    const result = await (await prismaClient()).product.deleteMany();
+    if (result) {
+      return result.count;
     }
   }
 }
