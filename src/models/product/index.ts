@@ -30,9 +30,7 @@ class ProductModel implements IProduct {
         image: product.image,
         name: product.name,
         price: product.price,
-        user: {
-          connect: { id: userID },
-        },
+        userID: userID,
       },
     });
     if (createdProduct) {

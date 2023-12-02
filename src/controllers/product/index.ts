@@ -58,9 +58,7 @@ class ProductController {
 
       res.status(200).send(`Deleted ${deletedProductsCount} products`);
     } catch (e) {
-      res
-        .status(400)
-        .send(`Ocorreu um erro ao apagar os produtos: ${e}`);
+      res.status(400).send(`Ocorreu um erro ao apagar os produtos: ${e}`);
     }
     res.sendStatus(400);
   }
