@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../../models/user';
-import { CustomUserRequest } from '../../types/request';
+import { CustomUserRequest } from '../../types/auth';
 
 class UserController {
   // receive the request

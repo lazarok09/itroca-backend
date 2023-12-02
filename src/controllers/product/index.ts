@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductModel } from '../../models/product';
-import { CustomUserRequest } from '../../types/request';
+import { CustomUserRequest } from '../../types/auth';
 
 class ProductController {
   // receive the request
