@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CustomUserRequest } from '../types/auth';
+import { CustomUserRequest } from '../types/request';
 import { verifyJWT } from '../lib/jsonwebtoken';
 enum ENUM_AUTH_MIDDLEWARE {
   INVALID_TOKEN = 'Bad request: invalid token in authorization headers',
