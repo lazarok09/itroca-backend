@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { AuthModel } from '../../models/auth';
+import { extractBearerTokenFromAuthorization } from '../../helpers/auth';
 
 class AuthController {
   // receive the request
@@ -25,9 +26,17 @@ class AuthController {
   }
   async signOff(req: Request, res: Response) {
     try {
-      const userId = req.body?.id;
-      const result = await new AuthModel().signOut(userId);
-      res.status(200).send(`Sucesso no log off: ${result}`);
+      const token = extractBearerTokenFromAuthorization(req);
+      if (token) {
+        const result = await new AuthModel().signOut(token);
+        res.status(200).send(result);
+      } else {
+        res
+          .status(404)
+          .send(
+            'Essa é uma url protegida, envie um token para confirmar sua identidade',
+          );
+      }
     } catch (e) {
       res.status(400).send('Ocorreu um erro durante o logoff do usuário');
     }

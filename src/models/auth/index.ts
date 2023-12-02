@@ -1,6 +1,5 @@
 import { prismaClient } from '../../database/connect';
 import { UserModel } from '../../models/user';
-import { signOffUser } from '../../services/auth';
 import { comparePasswordHash } from '../../lib/bcrypt';
 import { generateJWT } from '../../lib/jsonwebtoken';
 interface SignUpModelProps
@@ -9,8 +8,10 @@ interface SignUpModelProps
 }
 interface IAuthModel {
   signIn: (email: string, password: string) => Promise<User | undefined>;
-  signOut: (id: number) => Promise<Boolean>;
+  signOut: (token: string) => Promise<TokenBlackList | undefined>;
   signUp: (props: SignUpModelProps) => Promise<Omit<User, 'hash'>>;
+  verifyJWTInBlackList: (token: string) => Promise<Boolean>;
+  createJWTInBlackList: (token: string) => Promise<TokenBlackList | undefined>;
 }
 
 class AuthModel implements IAuthModel {
@@ -49,8 +50,8 @@ class AuthModel implements IAuthModel {
     // return the token
   }
 
-  async signOut(id: number) {
-    const result = await signOffUser({ id });
+  async signOut(token: string) {
+    const result = await new AuthModel().createJWTInBlackList(token);
     // send to blacklist this user token
     return result;
   }
@@ -67,6 +68,34 @@ class AuthModel implements IAuthModel {
     // return the user and the token
 
     return result;
+  }
+  async verifyJWTInBlackList(token: string): Promise<boolean> {
+    const tokenInBlackList = await (
+      await prismaClient()
+    ).tokenBlackList.findFirst({
+      where: {
+        token: token,
+      },
+    });
+    if (tokenInBlackList) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  async createJWTInBlackList(
+    token: string,
+  ): Promise<TokenBlackList | undefined> {
+    const createdJWT = await (
+      await prismaClient()
+    ).tokenBlackList.create({
+      data: {
+        token,
+      },
+    });
+    if (createdJWT) {
+      return createdJWT;
+    }
   }
 }
 export { AuthModel };

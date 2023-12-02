@@ -31,7 +31,9 @@ class ProductController {
   }
   async createProduct(req: Request, res: Response) {
     try {
+
       const customRequest: CustomUserRequest = req as any;
+
       const requestBody: Product = customRequest.body;
 
       const product = await new ProductModel().createProduct({

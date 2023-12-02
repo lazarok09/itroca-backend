@@ -1,13 +1,15 @@
 import jwt from 'jsonwebtoken';
+
 const SECRET_KEY = process.env.SECRET_KEY;
+
 export const generateJWT = ({ email, id }: { email: string; id: number }) => {
   if (SECRET_KEY) {
     return jwt.sign(
       {
         data: { email: email, id: id },
       },
-      SECRET_KEY,
-      { expiresIn: '1h' },
+    SECRET_KEY,
+      { expiresIn: process.env.REFRESH_TOKEN },
     );
   } else {
     throw new Error('Secret Key not provided');
