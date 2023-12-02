@@ -34,7 +34,7 @@ class AuthController {
   }
   async signUp(req: Request, res: Response) {
     try {
-      const user: User & { password: string } = req.body;
+      const user: AuthUser & { password: string } = req.body;
 
       if (
         !user.address?.length ||
@@ -49,15 +49,18 @@ class AuthController {
             'Ocorreu um erro durante o registro. Verifique os atributos novamente',
           );
       }
-      const result = await new AuthModel().signUp({
+      await new AuthModel().signUp({
         address: user.address,
         name: user.name,
         email: user.email,
         age: user.age,
         password: user.password,
       });
-
-      res.status(200).send(result);
+      const signUpResponse = await new AuthModel().signIn(
+        user.email,
+        user.password,
+      );
+      res.status(200).send(signUpResponse);
     } catch (e) {
       res
         .status(400)

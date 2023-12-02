@@ -30,9 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-                properties:
-                  token: string
+                $ref: '#/components/schemas/UserWithToken'
   /auth/signout:
     post:
       requestBody:
@@ -86,10 +84,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithHash'
+                $ref: '#/components/schemas/UserWithToken'
 components:
   schemas:
-    User:
+    UserWithToken:
       type: object
       properties:
         id:
@@ -102,18 +100,5 @@ components:
           type: integer
         address:
           type: string
-    UserWithHash:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        email:
-          type: string
-        age:
-          type: integer
-        address:
-          type: string
-        hash:
+        token:
           type: string
