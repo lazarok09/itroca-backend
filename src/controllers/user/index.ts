@@ -40,16 +40,5 @@ class UserController {
       res.status(400).send(`Ocorreu um erro durante a busca de usuários`);
     }
   }
-  async deleteUsers(req: Request, res: Response) {
-    try {
-      const users = await new UserModel().deleteUsers();
-      if (!users) {
-        res.status(400).send(`Ocorreu um erro ao apagar todos os usuários`);
-      }
-      res.status(200).send(`Você deletou com sucesso ${users}`);
-    } catch (e) {
-      res.status(400).send(`Ocorreu um erro ao apagar todos os usuários`);
-    }
-  }
 }
 export default new UserController();

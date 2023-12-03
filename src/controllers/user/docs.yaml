@@ -15,11 +15,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-    delete:
-      description: User handler to delete all users
-      responses:
-        '200':
-          description: Delete the users.
   /user/{id}:
     get:
       security:
@@ -42,10 +37,10 @@ paths:
                 $ref: '#/components/schemas/User'
 components:
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth: # arbitrary name for the security scheme
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
   schemas:
     User:
       type: object

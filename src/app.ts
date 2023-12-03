@@ -64,7 +64,6 @@ app.get('/user/:id', authMiddleware, UserController.getUser);
 app.use('/users', express.json());
 app.use('/users', express.urlencoded({ extended: true }));
 app.get('/users', UserController.getUsers);
-app.delete('/users', UserController.deleteUsers);
 
 // Product
 app.get('/product/:id', ProductController.getProduct);

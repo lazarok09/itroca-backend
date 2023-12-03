@@ -31,7 +31,6 @@ class ProductController {
   }
   async createProduct(req: Request, res: Response) {
     try {
-
       const customRequest: CustomUserRequest = req as any;
 
       const requestBody: Product = customRequest.body;
@@ -61,6 +60,22 @@ class ProductController {
       res.status(200).send(`Deleted ${deletedProductsCount} products`);
     } catch (e) {
       res.status(400).send(`Ocorreu um erro ao apagar os produtos: ${e}`);
+    }
+    res.sendStatus(400);
+  }
+  async deleteProduct(req: Request, res: Response) {
+    try {
+      const productId = Number(req.params['id']) as number | undefined;
+      if (!productId) {
+        res.status(404).send('Product id is missing');
+        return;
+      }
+      const deletedProductsCount = await new ProductModel().deleteProduct(
+        productId,
+      );
+      res.status(200).send(`Deleted ${deletedProductsCount} product`);
+    } catch (e) {
+      res.status(400).send(`Ocorreu um erro ao apagar o produto: ${e}`);
     }
     res.sendStatus(400);
   }

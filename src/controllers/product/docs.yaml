@@ -28,23 +28,6 @@ components:
           type: string
 
 paths:
-  /product/{id}:
-    get:
-      description: Product handler to get products
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: The product id
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Returns a product.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
   /products:
     get:
       description: Product handler to get products
@@ -62,6 +45,40 @@ paths:
       responses:
         '200':
           description: Returns boolean.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /product/{id}:
+    get:
+      description: Product handler to get products
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: The product id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Returns a product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    delete:
+      description: Product handler to delete product
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: The product id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Returns the deleted product.
           content:
             application/json:
               schema:
@@ -85,6 +102,27 @@ paths:
       responses:
         '200':
           description: Returns a product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      description: To update a product
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: new Iphone
+              price: 1999.90
+              image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
+      responses:
+        '200':
+          description: Returns the new product.
           content:
             application/json:
               schema:
