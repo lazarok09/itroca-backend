@@ -13,18 +13,17 @@ const options = {
   definition: {
     openapi: '3.1.0',
     info: {
-      title: 'ITroca Express API with Swagger',
+      title: 'Node 20 Express API with Swagger',
       version: '0.1.0',
-      description:
-        'This is a simple CRUD API application made with Express and documented with Swagger',
+      description: 'This API was made with Express and documented with Swagger',
       license: {
         name: 'MIT',
         url: 'https://spdx.org/licenses/MIT.html',
       },
       contact: {
-        name: 'ITroca',
-        url: 'https://itroca.com.br',
-        email: 'itroca@email.com',
+        name: 'Lazaro',
+        url: 'https://github.com/lazarok09',
+        email: 'lazarok09@email.com',
       },
     },
     servers: [
