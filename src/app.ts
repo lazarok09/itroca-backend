@@ -51,12 +51,13 @@ app.get('/', async (_, res) => {
 // Auth
 app.use('/auth', AuthRouter());
 
-app.use('/user', UserRouter());
+// User
 app.use('/users', UsersRouter());
+app.use('/user', UserRouter());
 
 // Product
-app.use('/product', ProductRouter());
 app.use('/products', ProductsRouter());
+app.use('/product', ProductRouter());
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

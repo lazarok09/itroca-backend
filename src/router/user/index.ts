@@ -14,9 +14,7 @@ export const UsersRouter = () => {
 };
 
 export const UserRouter = () => {
-  // User
   router.get('/:id', authMiddleware, UserController.getUser);
   router.use('/:id', express.json());
-
   return router;
 };

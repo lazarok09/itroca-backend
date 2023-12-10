@@ -8,7 +8,11 @@ class ProductController {
   async getProducts(req: Request, res: Response) {
     try {
       const products = await new ProductModel().getProducts();
-      res.status(200).send(products);
+      if (products) {
+        res.status(200).send(products);
+      } else {
+        res.status(204).send([]);
+      }
       return products;
     } catch (e) {
       res
@@ -21,13 +25,17 @@ class ProductController {
     if (Boolean(productId?.length)) {
       try {
         const product = await new ProductModel().getProduct(Number(productId));
-        res.status(200).send(product);
-        return product;
+        if (!product) {
+          res.status(404).send('Produto não encontrado');
+        } else {
+          res.status(200).send(product);
+        }
       } catch (e) {
         res.status(400).send(`Parece que um erro ocorreu ${e}`);
       }
+    } else {
+      res.sendStatus(400);
     }
-    res.sendStatus(400);
   }
   async createProduct(req: Request, res: Response) {
     try {
