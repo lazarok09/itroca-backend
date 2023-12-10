@@ -18,5 +18,9 @@ export const ProductRouter = () => {
   router.use('/', authMiddleware, express.json());
   router.use('/', authMiddleware, express.urlencoded({ extended: true }));
   router.post('/', authMiddleware, ProductController.createProduct);
+
+  router.use('/:id', authMiddleware, express.json());
+  router.use('/:id', authMiddleware, express.urlencoded({ extended: true }));
+  router.patch('/:id', authMiddleware, ProductController.updateProduct);
   return router;
 };

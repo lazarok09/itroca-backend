@@ -37,6 +37,40 @@ class ProductController {
       res.sendStatus(400);
     }
   }
+  async updateProduct(req: Request, res: Response) {
+    const productId = req.params['id'] as string | undefined;
+
+    const customRequest: CustomUserRequest = req as any;
+
+    const requestBody: Product = customRequest.body;
+
+    if (!requestBody || !productId?.length) {
+      res
+        .status(400)
+        .send('Verifique o id do produto ou os campos no body da requisição');
+      return;
+    }
+
+    if (productId?.length && productId) {
+      try {
+        const product = await new ProductModel().updateProduct({
+          product: {
+            image: requestBody.image,
+            name: requestBody.name,
+            price: Number(requestBody.price),
+          },
+          userID: customRequest.user.data.id,
+          productId: parseInt(productId, 10),
+        });
+
+        res.status(200).send(product);
+      } catch (e) {
+        res.status(400).send(`Parece que um erro ocorreu ${e}`);
+      }
+    } else {
+      res.sendStatus(400);
+    }
+  }
   async createProduct(req: Request, res: Response) {
     try {
       const customRequest: CustomUserRequest = req as any;

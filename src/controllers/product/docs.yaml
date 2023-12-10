@@ -83,6 +83,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+    patch:
+      description: To update a product
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: The product id
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: new Iphone
+              price: 1999.90
+              image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
+      responses:
+        '200':
+          description: Returns the new product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
 
   /product:
     post:
@@ -102,27 +129,6 @@ paths:
       responses:
         '200':
           description: Returns a product.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-    put:
-      description: To update a product
-      security:
-        - bearerAuth: []
-
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-            example:
-              name: new Iphone
-              price: 1999.90
-              image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
-      responses:
-        '200':
-          description: Returns the new product.
           content:
             application/json:
               schema:

@@ -1,12 +1,17 @@
 import { prismaClient } from '../../database/connect';
-interface CreateProduct {
-  product: Pick<Product, 'image' | 'name' | 'price'>;
+interface UserProduct {
+  product: Omit<Product, 'id'>;
   userID: number;
 }
+interface UpdateProduct extends UserProduct {
+  productId: Product['id'];
+}
+
 interface IProduct {
   getProduct: (id: number) => Promise<Product | undefined>;
   getProducts: () => Promise<Product[] | undefined>;
-  createProduct: (props: CreateProduct) => Promise<Product | undefined>;
+  updateProduct: (props: UpdateProduct) => Promise<Product | undefined>;
+  createProduct: (props: UserProduct) => Promise<Product | undefined>;
   deleteProducts: () => Promise<number | undefined>;
   deleteProduct: (id: number) => Promise<Product | undefined>;
 }
@@ -23,7 +28,25 @@ class ProductModel implements IProduct {
       return product;
     }
   }
-  async createProduct({ product, userID }: CreateProduct) {
+  async updateProduct({ product, userID, productId }: UpdateProduct) {
+    const updatedProduct = await (
+      await prismaClient()
+    ).product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        image: product.image,
+        name: product.name,
+        price: product.price,
+        userID: userID,
+      },
+    });
+    if (updatedProduct) {
+      return updatedProduct;
+    }
+  }
+  async createProduct({ product, userID }: UserProduct) {
     const createdProduct = await (
       await prismaClient()
     ).product.create({
