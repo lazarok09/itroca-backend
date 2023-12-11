@@ -39,5 +39,11 @@ docker exec -it docker_hash_id bash
 
 psql -U admin -d itrocadata
 
-itrocadata=#
+```
+
+## Where the postgress database is located
+```
+cd /
+ cd ./var/lib
+ ls -lha docker/volumes
 ```
