@@ -3,31 +3,11 @@ info:
   title: User API
   version: 1.0.0
 paths:
-  /users:
-    get:
-      description: User handler to get all users
-      responses:
-        '200':
-          description: Returns a User.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-  /user/{id}:
+  /user:
     get:
       security:
         - bearerAuth: []
-      description: User handler to get a user by ID
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the user to retrieve
-          schema:
-            type: integer
+      description: User handler to get a user by token
       responses:
         '200':
           description: Returns a User.

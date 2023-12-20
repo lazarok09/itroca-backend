@@ -3,7 +3,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
 import { ProductRouter, ProductsRouter } from './router/product';
-import { UserRouter, UsersRouter } from './router/user';
+import { UserRouter } from './router/user';
 import { AuthRouter } from './router/auth';
 
 const app = express();
@@ -52,7 +52,7 @@ app.get('/', async (_, res) => {
 app.use('/auth', AuthRouter());
 
 // User
-app.use('/users', UsersRouter());
+
 app.use('/user', UserRouter());
 
 // Product

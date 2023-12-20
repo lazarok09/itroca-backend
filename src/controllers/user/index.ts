@@ -7,37 +7,28 @@ class UserController {
 
   async getUser(req: Request, res: Response) {
     try {
-      const userID = req.params['id'] as string | null;
       const customRequest: CustomUserRequest = req as any;
+      const userJWT = customRequest?.user;
 
-      if (userID?.length) {
-        const user = await new UserModel().findUser({
-          id: Number(userID),
-          user: customRequest?.user,
+      if (userJWT.data.email) {
+        const searchedUser = await new UserModel().findUser({
+          email: userJWT?.data?.email,
         });
 
-        if (!user) {
+        if (!searchedUser) {
           res.status(404).send('Usuário não encontrado');
+          return;
         }
+        // buisiness logic to find user by jwt
 
-        res.status(200).send(user);
-      } else {
-        res.status(400);
-        res.send('Parametro obrigatório não especificado');
+        if (userJWT && userJWT.data.email === searchedUser.email) {
+          res.status(200).send(searchedUser);
+        } else {
+          throw new Error('Token JWT incorreto');
+        }
       }
     } catch (e) {
-      res.status(400).send(`Ocorreu um erro durante a busca do usuário: ${e}`);
-    }
-  }
-  async getUsers(req: Request, res: Response) {
-    try {
-      const users = await new UserModel().findUsers();
-      if (!users) {
-        res.sendStatus(404);
-      }
-      res.status(200).send(users);
-    } catch (e) {
-      res.status(400).send(`Ocorreu um erro durante a busca de usuários`);
+      res.status(400).send('Erro durante a busca do usuário');
     }
   }
 }
