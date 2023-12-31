@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import { AuthModel } from '../../models/auth';
-import { extractBearerTokenFromAuthorization } from '../../helpers/auth';
+import {
+  extractBearerTokenFromAuthorization,
+  formatRefreshToken,
+} from '../../helpers/auth';
+import { AUTH_COOKIE_NAME } from '../../lib/jsonwebtoken';
 
 class AuthController {
   // receive the request
@@ -14,13 +18,19 @@ class AuthController {
       }
       // do business logic here
       const result = await new AuthModel().signIn(email, password);
+
       if (result) {
         res.status(200);
+        res.cookie(AUTH_COOKIE_NAME, result.token, {
+          maxAge: formatRefreshToken({ token: result.token }),
+          httpOnly: true,
+        });
         res.send(result);
       } else {
         res.status(401).send(`Usuário ou senha incorretos`);
       }
     } catch (e) {
+      console.error('🚀 ~ file: index.ts:33 ~ AuthController ~ signIn ~ e:', e);
       res.status(400).send('Ocorreu um erro durante o login do usuário');
     }
   }

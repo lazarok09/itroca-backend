@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.SECRET_KEY;
-
+export const AUTH_COOKIE_NAME = 'itrocatoken';
 export const generateJWT = ({ email, id }: { email: string; id: number }) => {
   if (SECRET_KEY) {
     return jwt.sign(
       {
         data: { email: email, id: id },
       },
-    SECRET_KEY,
+      SECRET_KEY,
       { expiresIn: process.env.REFRESH_TOKEN },
     );
   } else {

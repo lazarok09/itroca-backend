@@ -26,6 +26,11 @@ paths:
       description: Auth handler to login / logout users
       responses:
         '200':
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: itrocatoken=Mdawkopkawdpoaw.mdawAWjeoiakiwo.DAwkmopiadw; Path=/; HttpOnly
           description: Returns a user and a token string.
           content:
             application/json:
