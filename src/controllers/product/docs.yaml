@@ -4,10 +4,10 @@ info:
   version: 1.0.0
 components:
   securitySchemes:
-    bearerAuth: # arbitrary name for the security scheme
-      type: http
-      scheme: bearer
-      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+    cookieAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: cookie
+      name: itrocatoken # optional, arbitrary value for documentation purposes
   schemas:
     Product:
       type: object
@@ -86,7 +86,7 @@ paths:
     patch:
       description: To update a product
       security:
-        - bearerAuth: []
+        - cookieAuth: []
       parameters:
         - in: path
           required: true
@@ -115,7 +115,7 @@ paths:
     post:
       description: Register a product
       security:
-        - bearerAuth: []
+        - cookieAuth: []
 
       requestBody:
         content:

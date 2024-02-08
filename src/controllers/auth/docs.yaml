@@ -39,7 +39,7 @@ paths:
   /auth/signout:
     post:
       security:
-      - bearerAuth: []
+      - cookieAuth: []
       description: Auth handler to log out user
       responses:
         '200':
@@ -86,10 +86,10 @@ paths:
                 $ref: '#/components/schemas/UserWithToken'
 components:
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
-      type: http
-      scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    cookieAuth:            # arbitrary name for the security scheme
+      type: apiKey
+      in: cookie
+      name: itrocatoken    # optional, arbitrary value for documentation purposes
   schemas:
     UserWithToken:
       type: object
