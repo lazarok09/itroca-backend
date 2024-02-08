@@ -23,7 +23,12 @@ export const ProductsRouter = () => {
 };
 
 export const ProductRouter = () => {
-  router.get('/:id', ProductController.getProduct);
+  router.get(
+    '/:id',
+    cookieParser(),
+    authMiddleware,
+    ProductController.getProduct,
+  );
 
   router.delete(
     '/:id',

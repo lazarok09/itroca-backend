@@ -25,9 +25,15 @@ class ProductController {
   }
   async getProduct(req: Request, res: Response) {
     const productId = req.params['id'] as string | undefined;
+    const customRequest: CustomUserRequest = req as any;
+    const userID = customRequest.user.data.id;
+    
     if (Boolean(productId?.length)) {
       try {
-        const product = await new ProductModel().getProduct(Number(productId));
+        const product = await new ProductModel().getProduct(
+          Number(productId),
+          userID,
+        );
         if (!product) {
           res.status(404).send('Produto não encontrado');
         } else {
