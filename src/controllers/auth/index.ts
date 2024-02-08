@@ -23,7 +23,7 @@ class AuthController {
         res.status(200);
         res.cookie(AUTH_COOKIE_NAME, result.token, {
           maxAge: formatRefreshToken({ token: result.token }),
-          httpOnly: false,
+          httpOnly: true,
         });
         res.send(result);
       } else {
