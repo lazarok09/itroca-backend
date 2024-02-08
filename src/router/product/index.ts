@@ -31,15 +31,23 @@ export const ProductRouter = () => {
     authMiddleware,
     ProductController.getProduct,
   );
-  
-  router.use('/', cookieParser());
-  router.use('/', express.json());
-  router.use('/', express.urlencoded({ extended: true }));
-  router.post('/', authMiddleware, ProductController.createProduct);
 
-  router.use('/:id', cookieParser());
-  router.use('/:id', express.json());
-  router.use('/:id', express.urlencoded({ extended: true }));
-  router.patch('/:id', authMiddleware, ProductController.updateProduct);
+  router.post(
+    '/',
+    cookieParser(),
+    express.json(),
+    express.urlencoded({ extended: true }),
+    authMiddleware,
+    ProductController.createProduct,
+  );
+
+  router.patch(
+    '/:id',
+    cookieParser(),
+    express.json(),
+    express.urlencoded({ extended: true }),
+    authMiddleware,
+    ProductController.updateProduct,
+  );
   return router;
 };
