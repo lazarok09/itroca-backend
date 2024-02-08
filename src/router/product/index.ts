@@ -14,12 +14,12 @@ export const ProductsRouter = () => {
 
 export const ProductRouter = () => {
   router.get('/:id', ProductController.getProduct);
-  
+
   router.use('/', cookieParser());
   router.use('/', express.json());
   router.use('/', express.urlencoded({ extended: true }));
   router.post('/', authMiddleware, ProductController.createProduct);
-
+  
   router.use('/:id', cookieParser());
   router.use('/:id', express.json());
   router.use('/:id', express.urlencoded({ extended: true }));

@@ -1,12 +1,18 @@
 import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import cors from 'cors';
 import { ProductRouter, ProductsRouter } from './router/product';
 import { UserRouter } from './router/user';
 import { AuthRouter } from './router/auth';
 
 const app = express();
+
+const corsOptions = {
+  origin: process.env.PUBLIC_WEB_URL,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+};
 
 const port = 4000;
 const options = {
@@ -48,6 +54,7 @@ app.get('/', async (_, res) => {
   );
 });
 
+app.use('/', cors(corsOptions));
 // Auth
 app.use('/auth', AuthRouter());
 
