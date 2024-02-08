@@ -1,5 +1,5 @@
 import express, { Response } from 'express';
-
+import cookieParser from 'cookie-parser';
 import ProductController from '../../controllers/product';
 
 import { authMiddleware } from '../../middlewares/auth';
@@ -14,13 +14,15 @@ export const ProductsRouter = () => {
 
 export const ProductRouter = () => {
   router.get('/:id', ProductController.getProduct);
-
-  router.use('/', authMiddleware, express.json());
-  router.use('/', authMiddleware, express.urlencoded({ extended: true }));
+  
+  router.use('/', cookieParser());
+  router.use('/', express.json());
+  router.use('/', express.urlencoded({ extended: true }));
   router.post('/', authMiddleware, ProductController.createProduct);
 
-  router.use('/:id', authMiddleware, express.json());
-  router.use('/:id', authMiddleware, express.urlencoded({ extended: true }));
+  router.use('/:id', cookieParser());
+  router.use('/:id', express.json());
+  router.use('/:id', express.urlencoded({ extended: true }));
   router.patch('/:id', authMiddleware, ProductController.updateProduct);
   return router;
 };

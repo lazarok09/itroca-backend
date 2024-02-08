@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthModel } from '../../models/auth';
 import {
-  extractBearerTokenFromAuthorization,
+  extractAuthCookieFromRequest,
   formatRefreshToken,
 } from '../../helpers/auth';
 import { AUTH_COOKIE_NAME } from '../../lib/jsonwebtoken';
@@ -36,7 +36,7 @@ class AuthController {
   }
   async signOff(req: Request, res: Response) {
     try {
-      const token = extractBearerTokenFromAuthorization(req);
+      const token = extractAuthCookieFromRequest(req);
       if (token) {
         const result = await new AuthModel().signOut(token);
         res.status(200).send(result);

@@ -3,7 +3,7 @@ import { CustomUserRequest } from '../types/request';
 import { verifyJWT } from '../lib/jsonwebtoken';
 import { AuthModel } from '../models/auth';
 
-import { extractBearerTokenFromAuthorization } from '../helpers/auth';
+import { extractAuthCookieFromRequest } from '../helpers/auth';
 enum ENUM_AUTH_MIDDLEWARE {
   INVALID_TOKEN = 'Bad request: invalid token in authorization headers',
   MIDDLEWARE = 'Invalid or expired token in authorization headers',
@@ -13,8 +13,8 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = extractBearerTokenFromAuthorization(req);
   try {
+    const token = extractAuthCookieFromRequest(req);
     if (!token || !token.length) {
       res.status(404).send(ENUM_AUTH_MIDDLEWARE.INVALID_TOKEN);
       return;
