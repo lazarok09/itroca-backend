@@ -100,7 +100,13 @@ class ProductController {
   }
   async deleteProducts(req: Request, res: Response) {
     try {
-      const deletedProductsCount = await new ProductModel().deleteProducts();
+      const customRequest: CustomUserRequest = req as any;
+
+      const userID = customRequest.user.data.id;
+
+      const deletedProductsCount = await new ProductModel().deleteProducts(
+        userID,
+      );
 
       res.status(200).send(`Deleted ${deletedProductsCount} products`);
     } catch (e) {

@@ -12,7 +12,7 @@ interface IProduct {
   getProducts: (userID: number) => Promise<Product[] | undefined>;
   updateProduct: (props: UpdateProduct) => Promise<Product | undefined>;
   createProduct: (props: UserProduct) => Promise<Product | undefined>;
-  deleteProducts: () => Promise<number | undefined>;
+  deleteProducts: (userID: number) => Promise<number | undefined>;
   deleteProduct: (id: number) => Promise<Product | undefined>;
 }
 class ProductModel implements IProduct {
@@ -73,8 +73,14 @@ class ProductModel implements IProduct {
       return searchedProducts;
     }
   }
-  async deleteProducts() {
-    const result = await (await prismaClient()).product.deleteMany();
+  async deleteProducts(userID: number) {
+    const result = await (
+      await prismaClient()
+    ).product.deleteMany({
+      where: {
+        userID: userID,
+      },
+    });
     if (result) {
       return result.count;
     }

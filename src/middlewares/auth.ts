@@ -5,7 +5,7 @@ import { AuthModel } from '../models/auth';
 
 import { extractAuthCookieFromRequest } from '../helpers/auth';
 enum ENUM_AUTH_MIDDLEWARE {
-  INVALID_TOKEN = 'Bad request: invalid token in authorization headers',
+  INVALID_TOKEN = 'Invalid token in authorization headers',
   MIDDLEWARE = 'Invalid or expired token in authorization headers',
 }
 export const authMiddleware = async (

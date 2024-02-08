@@ -1,4 +1,4 @@
-import express, { Response } from 'express';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import ProductController from '../../controllers/product';
 
@@ -13,7 +13,12 @@ export const ProductsRouter = () => {
     authMiddleware,
     ProductController.getProducts,
   );
-  router.delete('/', ProductController.deleteProducts);
+  router.delete(
+    '/',
+    cookieParser(),
+    authMiddleware,
+    ProductController.deleteProducts,
+  );
   return router;
 };
 

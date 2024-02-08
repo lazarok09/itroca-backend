@@ -42,6 +42,8 @@ paths:
                   $ref: '#/components/schemas/Product'
     delete:
       description: Delete all products
+      security:
+        - cookieAuth: []
       responses:
         '200':
           description: Returns boolean.
