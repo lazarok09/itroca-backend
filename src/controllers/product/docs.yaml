@@ -55,6 +55,9 @@ paths:
   /product/{id}:
     get:
       description: Product handler to get products
+      security:
+        - cookieAuth: []
+
       parameters:
         - in: path
           required: true

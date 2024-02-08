@@ -117,12 +117,16 @@ class ProductController {
   async deleteProduct(req: Request, res: Response) {
     try {
       const productId = Number(req.params['id']) as number | undefined;
+      const customRequest: CustomUserRequest = req as any;
+      const userID = customRequest.user.data.id;
+
       if (!productId) {
         res.status(404).send('Product id is missing');
         return;
       }
       const deletedProductsCount = await new ProductModel().deleteProduct(
         productId,
+        userID,
       );
       res.status(200).send(`Deleted ${deletedProductsCount} product`);
     } catch (e) {

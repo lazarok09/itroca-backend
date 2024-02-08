@@ -25,6 +25,13 @@ export const ProductsRouter = () => {
 export const ProductRouter = () => {
   router.get('/:id', ProductController.getProduct);
 
+  router.delete(
+    '/:id',
+    cookieParser(),
+    authMiddleware,
+    ProductController.getProduct,
+  );
+  
   router.use('/', cookieParser());
   router.use('/', express.json());
   router.use('/', express.urlencoded({ extended: true }));

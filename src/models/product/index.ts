@@ -13,7 +13,7 @@ interface IProduct {
   updateProduct: (props: UpdateProduct) => Promise<Product | undefined>;
   createProduct: (props: UserProduct) => Promise<Product | undefined>;
   deleteProducts: (userID: number) => Promise<number | undefined>;
-  deleteProduct: (id: number) => Promise<Product | undefined>;
+  deleteProduct: (id: number, userID: number) => Promise<Product | undefined>;
 }
 class ProductModel implements IProduct {
   async getProduct(id: number) {
@@ -85,12 +85,13 @@ class ProductModel implements IProduct {
       return result.count;
     }
   }
-  async deleteProduct(id: number) {
+  async deleteProduct(id: number, userID: number) {
     const deletedProduct = await (
       await prismaClient()
     ).product.delete({
       where: {
         id,
+        userID: userID,
       },
     });
     if (deletedProduct) {
