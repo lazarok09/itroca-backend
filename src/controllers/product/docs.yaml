@@ -30,6 +30,8 @@ components:
 paths:
   /products:
     get:
+      security:
+        - cookieAuth: []
       description: Product handler to get products
       responses:
         '200':
