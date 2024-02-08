@@ -7,9 +7,7 @@ export const extractAuthCookieFromRequest = (
 ): string | undefined => {
   const token = req.cookies[AUTH_COOKIE_NAME];
 
-  if (token) {
-    return token;
-  }
+  return token;
 };
 
 export const formatRefreshToken = ({ token }: { token: string }): number => {

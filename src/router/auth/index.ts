@@ -1,8 +1,8 @@
 import express, { Response } from 'express';
 
 import AuthController from '../../controllers/auth';
-
-
+import { authMiddleware } from '../../middlewares/auth';
+import cookieParser from 'cookie-parser';
 
 export const AuthRouter = () => {
   const router = express.Router();
@@ -11,7 +11,8 @@ export const AuthRouter = () => {
   router.use('/', express.urlencoded({ extended: true }));
 
   router.post('/signin', AuthController.signIn);
-  router.post('/signout', AuthController.signOff);
+
+  router.post('/signout', cookieParser(), authMiddleware, AuthController.signOff);
 
   router.use('/signup', express.json());
   router.use('/signup', express.urlencoded({ extended: true }));

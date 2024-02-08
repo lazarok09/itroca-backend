@@ -41,11 +41,7 @@ class AuthController {
         const result = await new AuthModel().signOut(token);
         res.status(200).send(result);
       } else {
-        res
-          .status(404)
-          .send(
-            'Essa é uma url protegida, envie um token para confirmar sua identidade',
-          );
+        throw token;
       }
     } catch (e) {
       res.status(400).send('Ocorreu um erro durante o logoff do usuário');

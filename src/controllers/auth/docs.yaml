@@ -50,6 +50,12 @@ paths:
                 properties:
                   token:  
                     type: string
+                  id": 
+                    type: string
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
   /auth/signup:
     post:
       requestBody:
