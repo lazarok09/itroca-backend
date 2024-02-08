@@ -7,7 +7,12 @@ import { authMiddleware } from '../../middlewares/auth';
 const router = express.Router();
 
 export const ProductsRouter = () => {
-  router.get('/', ProductController.getProducts);
+  router.get(
+    '/',
+    cookieParser(),
+    authMiddleware,
+    ProductController.getProducts,
+  );
   router.delete('/', ProductController.deleteProducts);
   return router;
 };
@@ -19,7 +24,7 @@ export const ProductRouter = () => {
   router.use('/', express.json());
   router.use('/', express.urlencoded({ extended: true }));
   router.post('/', authMiddleware, ProductController.createProduct);
-  
+
   router.use('/:id', cookieParser());
   router.use('/:id', express.json());
   router.use('/:id', express.urlencoded({ extended: true }));

@@ -7,7 +7,10 @@ class ProductController {
 
   async getProducts(req: Request, res: Response) {
     try {
-      const products = await new ProductModel().getProducts();
+      const customRequest: CustomUserRequest = req as any;
+
+      const userID = customRequest.user.data.id;
+      const products = await new ProductModel().getProducts(userID);
       if (products) {
         res.status(200).send(products);
       } else {
