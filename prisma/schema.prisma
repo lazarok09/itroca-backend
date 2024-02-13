@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   name      String
   age       Int
   address   String
   hash      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(USER)
+  createdAt DateTime  @default(now())
+  role      Role      @default(USER)
+  updatedAt DateTime  @updatedAt
   products  Product[]
 }
 
@@ -32,12 +27,13 @@ model Product {
   image     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userID], references: [id])
   userID    Int
+  user      User     @relation(fields: [userID], references: [id])
 }
+
 model TokenBlackList {
-  id Int @id @default (autoincrement())
-  token String
+  id        Int      @id @default(autoincrement())
+  token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
