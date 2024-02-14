@@ -7,7 +7,7 @@ export class Product {
 
   image: string;
 
-  createdAt: string;
+  createdAt: Date;
 
-  updatedAt: string;
+  updatedAt: Date;
 }

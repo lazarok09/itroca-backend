@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { SignInAuthDto, SignUpAuthDto } from './dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  signIn(signIn: SignInAuthDto): User {
+    // TODO: remove hash from user entity
+    return {
+      address: 'Rua Dr emilio',
+      age: 21,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+      email: `${signIn.email}`,
+      hash: `${123}`,
+      id: 0,
+      name: 'Lazaro',
+      products: [
+        {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          id: 0,
+          image: 'http://github.com/lazarok09.png',
+          name: 'Iphone 15',
+          price: 2500,
+        },
+      ],
+    };
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  signUp(signUp: SignUpAuthDto) {
+    return `This action sign up a user ${signUp}`;
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  signOff() {
+    return `This action returns auth signoff`;
   }
 }
