@@ -67,14 +67,23 @@ paths:
               properties: 
                  name:
                   type: string
+                  example: testuser
+
                  email:
                   type: string
+                  example: testuser@hotmail.com
+
                  age:
                   type: integer
+                  example: 18
+
                  address:
                   type: string
+                  example: Rua Emanuel do Teste
+
                  password: 
                   type: string
+                  example: 123
                   required: 
                     - name
                     - email

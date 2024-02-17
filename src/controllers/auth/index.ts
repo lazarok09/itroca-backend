@@ -5,6 +5,8 @@ import {
   formatRefreshToken,
 } from '../../helpers/auth';
 import { AUTH_COOKIE_NAME } from '../../lib/jsonwebtoken';
+import { ErrorHandler } from '../../handlers/error';
+import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
 
 class AuthController {
   // receive the request
@@ -50,6 +52,7 @@ class AuthController {
   async signUp(req: Request, res: Response) {
     try {
       const user: AuthUser & { password: string } = req.body;
+      console.log('🚀 ~ AuthController ~ signUp ~ user:', user);
 
       if (
         !user.address?.length ||
@@ -63,6 +66,7 @@ class AuthController {
           .send(
             'Ocorreu um erro durante o registro. Verifique os atributos novamente',
           );
+        return;
       }
       await new AuthModel().signUp({
         address: user.address,
@@ -77,9 +81,15 @@ class AuthController {
       );
       res.status(200).send(signUpResponse);
     } catch (e) {
-      res
-        .status(400)
-        .send('Ocorreu um erro durante o cadastro de um novo usuário');
+      const treatedError: PrismaErrorShape = e as any;
+      res.status(400).send(
+        new ErrorHandler({
+          error: e,
+          message: 'Ocorreu um erro durante o cadastro de um novo usuário',
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
   }
 }

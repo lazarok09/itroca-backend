@@ -13,7 +13,6 @@ logs
 *.log
 
 # Optional: Editor directories
-.vscode/
 .idea/
 
 # Optional: Output of 'npm run build'
