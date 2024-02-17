@@ -52,7 +52,6 @@ class AuthController {
   async signUp(req: Request, res: Response) {
     try {
       const user: AuthUser & { password: string } = req.body;
-      console.log('🚀 ~ AuthController ~ signUp ~ user:', user);
 
       if (
         !user.address?.length ||
