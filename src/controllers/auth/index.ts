@@ -5,7 +5,7 @@ import {
   formatRefreshToken,
 } from '../../helpers/auth';
 import { AUTH_COOKIE_NAME } from '../../lib/jsonwebtoken';
-import { ErrorHandler } from '../../handlers/error';
+import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
 
 class AuthController {
@@ -16,7 +16,12 @@ class AuthController {
       const password = req?.body?.password;
 
       if (!email?.length || !password?.length) {
-        res.status(400).send('Atributo email ou senha não especificados');
+        res.status(422).send(
+          new GenericErrorHandler({
+            message: 'Atributo email ou senha não especificados',
+            status: 422,
+          }),
+        );
       }
       // do business logic here
       const result = await new AuthModel().signIn(email, password);
@@ -32,11 +37,19 @@ class AuthController {
         res.status(401).send(`Usuário ou senha incorretos`);
       }
     } catch (e) {
-      console.error('🚀 ~ file: index.ts:33 ~ AuthController ~ signIn ~ e:', e);
-      res.status(400).send('Ocorreu um erro durante o login do usuário');
+      const treatedError: PrismaErrorShape = e as any;
+
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: treatedError,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+          message: 'Ocorreu um erro durante o login do usuário',
+        }),
+      );
     }
   }
-  async signOff(req: Request, res: Response) {
+  async signOut(req: Request, res: Response) {
     try {
       const token = extractAuthCookieFromRequest(req);
       if (token) {
@@ -46,7 +59,16 @@ class AuthController {
         throw token;
       }
     } catch (e) {
-      res.status(400).send('Ocorreu um erro durante o logoff do usuário');
+      const treatedError: PrismaErrorShape = e as any;
+
+      res.status(400).send(
+        new PrismaErrorHandler({
+          message: 'Ocorreu um erro durante o logoff do usuário',
+          status: 400,
+          error: treatedError,
+          prismaMessage: getPrismaMessage(treatedError),
+        }),
+      );
     }
   }
   async signUp(req: Request, res: Response) {
@@ -60,11 +82,13 @@ class AuthController {
         !user.age ||
         !user.password?.length
       ) {
-        res
-          .status(400)
-          .send(
-            'Ocorreu um erro durante o registro. Verifique os atributos novamente',
-          );
+        res.status(422).send(
+          new GenericErrorHandler({
+            message:
+              'Ocorreu um erro durante o registro. Verifique os atributos novamente.',
+            status: 422,
+          }),
+        );
         return;
       }
       await new AuthModel().signUp({
@@ -82,7 +106,7 @@ class AuthController {
     } catch (e) {
       const treatedError: PrismaErrorShape = e as any;
       res.status(400).send(
-        new ErrorHandler({
+        new PrismaErrorHandler({
           error: e,
           message: 'Ocorreu um erro durante o cadastro de um novo usuário',
           prismaMessage: getPrismaMessage(treatedError),
