@@ -9,10 +9,6 @@ export interface PrismaErrorShape {
   };
 }
 
-export const getPrismaMessage = (shape: PrismaErrorShape) => {
-  try {
-    return PrismaError[shape.code];
-  } catch (e) {
-    return 'Erro no enum Prisma não foi encontrado.';
-  }
+export const getPrismaMessage = (shape: PrismaErrorShape): string => {
+  return PrismaError[shape?.code] ?? "Erro não encontrado";
 };
