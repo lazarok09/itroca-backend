@@ -75,13 +75,14 @@ class AuthController {
     try {
       const user: AuthUser & { password: string } = req.body;
 
-      if (
-        !user.address?.length ||
-        !user.name?.length ||
-        !user.email?.length ||
-        !user.age ||
-        !user.password?.length
-      ) {
+      const emptyValues = [
+        user.address,
+        user.name,
+        user.email,
+        user.password,
+      ].some((value: string) => !Boolean(value.length));
+
+      if (!Number.isSafeInteger(user.age) || emptyValues) {
         res.status(422).send(
           new GenericErrorHandler({
             message:
@@ -104,6 +105,7 @@ class AuthController {
       );
       res.status(200).send(signUpResponse);
     } catch (e) {
+      console.error('🚀 ~ AuthController ~ signUp ~ e:', e);
       const treatedError: PrismaErrorShape = e as any;
       res.status(400).send(
         new PrismaErrorHandler({
