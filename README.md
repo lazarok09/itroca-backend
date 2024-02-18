@@ -39,6 +39,15 @@ docker exec -it docker_hash_id bash
 
 psql -U admin -d itrocadata
 
+
+// change to the database you want
+ \c itrocadata
+
+ // list all tables
+ \dt
+
+ // preceed to execute sql instructions
+ SELECT * FROM "User";
 ```
 
 ## Where the postgress database is located
