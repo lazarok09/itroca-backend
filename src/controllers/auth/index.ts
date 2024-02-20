@@ -34,7 +34,14 @@ class AuthController {
         });
         res.send(result);
       } else {
-        res.status(401).send(`Usuário ou senha incorretos`);
+        res
+          .status(401)
+          .send(
+            new GenericErrorHandler({
+              message: `Usuário ou senha incorretos`,
+              status: 401,
+            }),
+          );
       }
     } catch (e) {
       const treatedError: PrismaErrorShape = e as any;
