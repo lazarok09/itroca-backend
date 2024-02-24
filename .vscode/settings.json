@@ -1,3 +1,37 @@
 {
-  "typescript.preferences.importModuleSpecifier": "relative"
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "material-icon-theme.folders.color": "#6273a6",
+  "material-icon-theme.folders.color": "#FF5555",
+  "material-icon-theme.folders.associations": {
+    "privates": "private",
+    "base-ui": "Base",
+    "__mocks": "Mock",
+    "_mocks": "Mock",
+    "in-memory": "Mock",
+    "dtos": "Typescript",
+    "dto": "Typescript",
+    "typeorm": "Database",
+    "http": "container",
+    "entities": "class",
+    "repositories": "Mappings",
+    "infra": "App",
+    "implementations": "core",
+    "useCases": "controller",
+    "modules": "components",
+    "sample": "dist"
+  },
+  "material-icon-theme.files.associations": {
+    "*.service.ts": "Nest-service",
+    "*.resolver.ts": "Nest-resolver",
+    "*.controller.ts": "Nest-controller",
+    "*.module.ts": "Nest-module",
+    "*.guard.ts": "Nest-guard",
+    "*.decorator.ts": "Nest-decorator",
+    "*.gateway.ts": "Nest-gateway",
+    "*.middleware.ts": "Nest-middleware",
+    "*.pipe.ts": "Nest-pipe",
+    "*.filter.ts": "Nest-filter",
+    "*.interceptor.ts": "Nest",
+    "*.entity.ts": "Nest"
+  }
 }
