@@ -133,6 +133,7 @@ class ProductController {
             status: 422,
           }),
         );
+        return;
       }
 
       const product = await new ProductModel().createProduct({
@@ -145,7 +146,6 @@ class ProductController {
       });
 
       res.status(201).send(product);
-      return product;
     } catch (e) {
       const treatedError: PrismaErrorShape = e as any;
 
