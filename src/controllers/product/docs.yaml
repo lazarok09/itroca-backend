@@ -35,6 +35,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '400':
+          description: Prisma error containg  message status prisma error and the error catch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrismaError'
 
   /product/{id}:
     get:
@@ -85,6 +91,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '422':
+          description: Generic error containg message and status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '400':
+          description: Prisma error containg  message status prisma error and the error catch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrismaError'
     patch:
       description: To update a product
       security:

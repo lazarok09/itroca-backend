@@ -8,6 +8,8 @@ enum EnumProductControllerErrors {
   attr = 'Verifique os atributos e tente novamente.',
   search = 'Parece que ocorreu um erro durante a busca de produtos.',
   update = 'Parece que ocorreu um erro durante a atualização deste produto.',
+  deleteAll = 'Ocorreu um erro ao apagar os produtos.',
+  delete = 'Ocorreu um erro ao apagar este produto.',
 }
 class ProductController {
   // receive the request
@@ -103,16 +105,14 @@ class ProductController {
       res.status(200).send(product);
     } catch (e) {
       const treatedError = e as PrismaErrorShape;
-      res
-        .status(400)
-        .send(
-          new PrismaErrorHandler({
-            error: e,
-            message: EnumProductControllerErrors.update,
-            prismaMessage: getPrismaMessage(treatedError),
-            status: 400,
-          }),
-        );
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: EnumProductControllerErrors.update,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
   }
 
@@ -172,27 +172,52 @@ class ProductController {
 
       res.status(200).send(`Deleted ${deletedProductsCount} products`);
     } catch (e) {
-      res.status(400).send(`Ocorreu um erro ao apagar os produtos: ${e}`);
+      const treatedError = e as PrismaErrorShape;
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: EnumProductControllerErrors.deleteAll,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
-    res.sendStatus(400);
   }
   async deleteProduct(req: Request, res: Response) {
-    try {
-      const productId = Number(req.params['id']) as number | undefined;
-      const customRequest: CustomUserRequest = req as any;
-      const userID = customRequest.user.data.id;
+    const productId = req.params?.id
+      ? (Number(req.params['id']) as number | undefined)
+      : undefined;
 
-      if (!productId) {
-        res.status(404).send('Product id is missing');
-        return;
-      }
+    const customRequest: CustomUserRequest = req as any;
+    const userID = customRequest.user.data.id;
+
+    if (!productId) {
+      res.status(422).send(
+        new GenericErrorHandler({
+          message: EnumProductControllerErrors.generic,
+          status: 422,
+        }),
+      );
+
+      return;
+    }
+
+    try {
       const deletedProductsCount = await new ProductModel().deleteProduct(
         productId,
         userID,
       );
       res.status(200).send(`Deleted ${deletedProductsCount} product`);
     } catch (e) {
-      res.status(400).send(`Ocorreu um erro ao apagar o produto: ${e}`);
+      const treatedError = e as PrismaErrorShape;
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: EnumProductControllerErrors.delete,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
     res.sendStatus(400);
   }
