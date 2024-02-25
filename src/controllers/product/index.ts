@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
+import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
+import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
 
 class ProductController {
   // receive the request
@@ -27,7 +29,7 @@ class ProductController {
     const productId = req.params['id'] as string | undefined;
     const customRequest: CustomUserRequest = req as any;
     const userID = customRequest.user.data.id;
-    
+
     if (Boolean(productId?.length)) {
       try {
         const product = await new ProductModel().getProduct(
@@ -84,7 +86,19 @@ class ProductController {
     try {
       const customRequest: CustomUserRequest = req as any;
 
-      const requestBody: Product = customRequest.body;
+      const requestBody: Omit<Product, 'id'> = customRequest.body;
+      if (
+        isNaN(requestBody?.price) ||
+        !requestBody?.image?.length ||
+        !requestBody?.name?.length
+      ) {
+        res.status(422).send(
+          new GenericErrorHandler({
+            message: 'Ocorreu um erro ao validar as informações do produto',
+            status: 422,
+          }),
+        );
+      }
 
       const product = await new ProductModel().createProduct({
         product: {
@@ -95,14 +109,21 @@ class ProductController {
         userID: customRequest.user.data.id,
       });
 
-      res.status(200).send(product);
+      res.status(201).send(product);
       return product;
     } catch (e) {
-      res
-        .status(400)
-        .send(`Parece que ocorreu um erro durante a criação do produto: ${e}`);
+      const treatedError: PrismaErrorShape = e as any;
+
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: 'Parece que ocorreu um erro durante a criação do produto',
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
+      return;
     }
-    res.sendStatus(400);
   }
   async deleteProducts(req: Request, res: Response) {
     try {

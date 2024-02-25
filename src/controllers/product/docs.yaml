@@ -2,30 +2,7 @@ openapi: 3.0.0
 info:
   title: Product API
   version: 1.0.0
-components:
-  securitySchemes:
-    cookieAuth: # arbitrary name for the security scheme
-      type: apiKey
-      in: cookie
-      name: itrocatoken # optional, arbitrary value for documentation purposes
-  schemas:
-    Product:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          required:
-            - 'name'
-        price:
-          type: integer
-        image:
-          type: string
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
+
 
 paths:
   /products:
@@ -134,9 +111,69 @@ paths:
               price: 4999.90
               image: https://http2.mlstatic.com/D_NQ_NP_958009-MLA71782868134_092023-O.webp
       responses:
-        '200':
+        '201':
           description: Returns a product.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '422':
+          description: Generic error containg message and status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '400':
+          description: Prisma error containg  message status prisma error and the error catch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrismaError'
+
+components:
+  securitySchemes:
+    cookieAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: cookie
+      name: itrocatoken # optional, arbitrary value for documentation purposes
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          required:
+            - 'name'
+        price:
+          type: integer
+        image:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    GenericError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ocorreu um erro ao {action}
+        status:
+          type: integer
+          example: 422
+
+    PrismaError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ocorreu um erro ao {action}
+        prismaMessage:
+          type: string
+        status:
+          type: integer
+          example: 400
+        error:
+          type: object
