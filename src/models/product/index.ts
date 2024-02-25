@@ -1,6 +1,7 @@
 import { prismaClient } from '../../database/connect';
+export interface ProductEntity extends Omit<Product, 'id'> {}
 interface UserProduct {
-  product: Omit<Product, 'id'>;
+  product: ProductEntity;
   userID: number;
 }
 interface UpdateProduct extends UserProduct {
@@ -17,7 +18,9 @@ interface IProduct {
 }
 class ProductModel implements IProduct {
   async getProduct(id: number, userID: number) {
-    const product = await(await prismaClient()).product.findFirst({
+    const product = await (
+      await prismaClient()
+    ).product.findFirst({
       where: {
         id,
         userID: userID,

@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import { ProductModel } from '../../models/product';
+import { ProductEntity, ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
-enum ProductControllerErrors {
+enum EnumProductControllerErrors {
   generic = 'Ocorreu um erro ao validar as informações do produto.',
   attr = 'Verifique os atributos e tente novamente.',
   search = 'Parece que ocorreu um erro durante a busca de produtos.',
+  update = 'Parece que ocorreu um erro durante a atualização deste produto.',
 }
 class ProductController {
   // receive the request
@@ -23,7 +24,7 @@ class ProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: ProductControllerErrors.search,
+          message: EnumProductControllerErrors.search,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -38,7 +39,7 @@ class ProductController {
     if (!productId?.length || !userID || isNaN(userID)) {
       res.status(422).send(
         new GenericErrorHandler({
-          message: ProductControllerErrors.generic,
+          message: EnumProductControllerErrors.generic,
           status: 422,
         }),
       );
@@ -70,41 +71,58 @@ class ProductController {
 
     const customRequest: CustomUserRequest = req as any;
 
-    const requestBody: Product = customRequest.body;
+    const requestBody: ProductEntity = customRequest.body;
 
-    if (!requestBody || !productId?.length) {
-      res
-        .status(400)
-        .send('Verifique o id do produto ou os campos no body da requisição');
+    if (
+      !requestBody ||
+      !productId?.length ||
+      !requestBody?.image?.length ||
+      !requestBody?.name?.length ||
+      isNaN(requestBody?.price)
+    ) {
+      res.status(422).send(
+        new GenericErrorHandler({
+          message: EnumProductControllerErrors.generic,
+          status: 422,
+        }),
+      );
       return;
     }
 
-    if (productId?.length && productId) {
-      try {
-        const product = await new ProductModel().updateProduct({
-          product: {
-            image: requestBody.image,
-            name: requestBody.name,
-            price: Number(requestBody.price),
-          },
-          userID: customRequest.user.data.id,
-          productId: parseInt(productId, 10),
-        });
+    try {
+      const product = await new ProductModel().updateProduct({
+        product: {
+          image: requestBody.image,
+          name: requestBody.name,
+          price: Number(requestBody.price),
+        },
+        userID: customRequest.user.data.id,
+        productId: parseInt(productId, 10),
+      });
 
-        res.status(200).send(product);
-      } catch (e) {
-        res.status(400).send(`Parece que um erro ocorreu ${e}`);
-      }
-    } else {
-      res.sendStatus(400);
+      res.status(200).send(product);
+    } catch (e) {
+      const treatedError = e as PrismaErrorShape;
+      res
+        .status(400)
+        .send(
+          new PrismaErrorHandler({
+            error: e,
+            message: EnumProductControllerErrors.update,
+            prismaMessage: getPrismaMessage(treatedError),
+            status: 400,
+          }),
+        );
     }
   }
+
   async createProduct(req: Request, res: Response) {
     try {
       const customRequest: CustomUserRequest = req as any;
 
-      const requestBody: Omit<Product, 'id'> = customRequest.body;
+      const requestBody: ProductEntity = customRequest.body;
       if (
+        !requestBody ||
         isNaN(requestBody?.price) ||
         !requestBody?.image?.length ||
         !requestBody?.name?.length
