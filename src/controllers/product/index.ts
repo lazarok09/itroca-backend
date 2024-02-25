@@ -3,7 +3,11 @@ import { ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
-
+enum ProductControllerErrors {
+  generic = 'Ocorreu um erro ao validar as informações do produto.',
+  attr = 'Verifique os atributos e tente novamente.',
+  search = 'Parece que ocorreu um erro durante a busca de produtos.',
+}
 class ProductController {
   // receive the request
 
@@ -13,16 +17,17 @@ class ProductController {
 
       const userID = customRequest.user.data.id;
       const products = await new ProductModel().getProducts(userID);
-      if (products) {
-        res.status(200).send(products);
-      } else {
-        res.status(204).send([]);
-      }
-      return products;
+      res.status(200).send(products);
     } catch (e) {
-      res
-        .status(400)
-        .send(`Parece que ocorreu um erro durante a busca de produtos ${e}`);
+      const treatedError = e as PrismaErrorShape;
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: ProductControllerErrors.search,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
   }
   async getProduct(req: Request, res: Response) {
@@ -30,22 +35,34 @@ class ProductController {
     const customRequest: CustomUserRequest = req as any;
     const userID = customRequest.user.data.id;
 
-    if (Boolean(productId?.length)) {
-      try {
-        const product = await new ProductModel().getProduct(
-          Number(productId),
-          userID,
-        );
-        if (!product) {
-          res.status(404).send('Produto não encontrado');
-        } else {
-          res.status(200).send(product);
-        }
-      } catch (e) {
-        res.status(400).send(`Parece que um erro ocorreu ${e}`);
-      }
-    } else {
-      res.sendStatus(400);
+    if (!productId?.length || !userID || isNaN(userID)) {
+      res.status(422).send(
+        new GenericErrorHandler({
+          message: ProductControllerErrors.generic,
+          status: 422,
+        }),
+      );
+      return;
+    }
+
+    try {
+      const product = await new ProductModel().getProduct(
+        Number(productId),
+        userID,
+      );
+
+      res.status(200).send(product);
+    } catch (e) {
+      const treatedError = e as PrismaErrorShape;
+
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: 'Ocorreu um erro na busca do produto',
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
   }
   async updateProduct(req: Request, res: Response) {
