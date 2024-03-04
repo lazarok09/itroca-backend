@@ -117,7 +117,7 @@ paths:
 
       description: Auth handler to register user
       responses:
-        '200':
+        '201':
           description: Returns a user with hash instead of plain text password.
           content:
             application/json:

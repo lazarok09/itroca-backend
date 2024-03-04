@@ -110,7 +110,7 @@ class AuthController {
         user.email,
         user.password,
       );
-      res.status(200).send(signUpResponse);
+      res.status(201).send(signUpResponse);
     } catch (e) {
       console.error('🚀 ~ AuthController ~ signUp ~ e:', e);
       const treatedError: PrismaErrorShape = e as any;
