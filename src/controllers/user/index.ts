@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../../models/user';
 import { CustomUserRequest } from '../../types/request';
+import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
+import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
 
 class UserController {
   // receive the request
@@ -16,7 +18,12 @@ class UserController {
         });
 
         if (!searchedUser) {
-          res.status(404).send('Usuário não encontrado');
+          res.status(404).send(
+            new GenericErrorHandler({
+              message: 'Usuário não encontrado',
+              status: 404,
+            }),
+          );
           return;
         }
         // buisiness logic to find user by jwt
@@ -28,7 +35,15 @@ class UserController {
         }
       }
     } catch (e) {
-      res.status(400).send('Erro durante a busca do usuário');
+      const treatedError = e as PrismaErrorShape;
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: 'Erro durante a busca do usuário',
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
     }
   }
 }
