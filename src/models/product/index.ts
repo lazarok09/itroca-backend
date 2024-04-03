@@ -36,7 +36,9 @@ class ProductModel implements IProduct {
     ).product.findMany({
       where: {
         userID: userID,
-        name,
+        name: {
+          search: `${name}`
+        },
       },
     });
     if (searchedProducts) {
