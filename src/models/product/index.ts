@@ -30,6 +30,34 @@ class ProductModel implements IProduct {
       return product;
     }
   }
+  async getProducts(userID: number, name?: string) {
+    const searchedProducts = await (
+      await prismaClient()
+    ).product.findMany({
+      where: {
+        userID: userID,
+        name,
+      },
+    });
+    if (searchedProducts) {
+      return searchedProducts;
+    }
+  }
+  async createProduct({ product, userID }: UserProduct) {
+    const createdProduct = await (
+      await prismaClient()
+    ).product.create({
+      data: {
+        image: product.image,
+        name: product.name,
+        price: product.price,
+        userID: userID,
+      },
+    });
+    if (createdProduct) {
+      return createdProduct;
+    }
+  }
   async updateProduct({ product, userID, productId }: UpdateProduct) {
     const updatedProduct = await (
       await prismaClient()
@@ -48,31 +76,17 @@ class ProductModel implements IProduct {
       return updatedProduct;
     }
   }
-  async createProduct({ product, userID }: UserProduct) {
-    const createdProduct = await (
+  async deleteProduct(id: number, userID: number) {
+    const deletedProduct = await (
       await prismaClient()
-    ).product.create({
-      data: {
-        image: product.image,
-        name: product.name,
-        price: product.price,
-        userID: userID,
-      },
-    });
-    if (createdProduct) {
-      return createdProduct;
-    }
-  }
-  async getProducts(userID: number) {
-    const searchedProducts = await (
-      await prismaClient()
-    ).product.findMany({
+    ).product.delete({
       where: {
+        id,
         userID: userID,
       },
     });
-    if (searchedProducts) {
-      return searchedProducts;
+    if (deletedProduct) {
+      return deletedProduct;
     }
   }
   async deleteProducts(userID: number) {
@@ -85,19 +99,6 @@ class ProductModel implements IProduct {
     });
     if (result) {
       return result.count;
-    }
-  }
-  async deleteProduct(id: number, userID: number) {
-    const deletedProduct = await (
-      await prismaClient()
-    ).product.delete({
-      where: {
-        id,
-        userID: userID,
-      },
-    });
-    if (deletedProduct) {
-      return deletedProduct;
     }
   }
 }

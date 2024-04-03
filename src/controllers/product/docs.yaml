@@ -9,6 +9,13 @@ paths:
       security:
         - cookieAuth: []
       description: Product handler to get products
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+            description: The name of the product
+
       responses:
         '200':
           description: Returns a product.

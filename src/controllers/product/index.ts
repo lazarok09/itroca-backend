@@ -19,7 +19,9 @@ class ProductController {
       const customRequest: CustomUserRequest = req as any;
 
       const userID = customRequest.user.data.id;
-      const products = await new ProductModel().getProducts(userID);
+      
+      const name = customRequest.query['name'] as string;
+      const products = await new ProductModel().getProducts(userID, name);
       res.status(200).send(products);
     } catch (e) {
       const treatedError = e as PrismaErrorShape;
