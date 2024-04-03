@@ -30,17 +30,20 @@ class ProductModel implements IProduct {
       return product;
     }
   }
-  async getProducts(userID: number, name?: string) {
+  async getProducts(userID: number, queryName?: string) {
+    const name = Boolean(queryName?.length) ? `${queryName}` : undefined;
+
     const searchedProducts = await (
       await prismaClient()
     ).product.findMany({
       where: {
         userID: userID,
         name: {
-          search: `${name}`
+          search: name,
         },
       },
     });
+
     if (searchedProducts) {
       return searchedProducts;
     }
