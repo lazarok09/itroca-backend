@@ -50,7 +50,7 @@ First of all, we are using docker here to build the dev enviroment fast and with
 
 <br>
 
-## Plus
+<hr>
 
 ### Accessing the database inside docker
 ```
@@ -69,7 +69,7 @@ psql -U admin -d itrocadata
  SELECT * FROM "User";
 ```
 
-### Where the postgress database is located at your docker volumes
+#### Where the postgress database is located at your docker volumes
 ```
 cd /
  cd ./var/lib
