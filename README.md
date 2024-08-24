@@ -8,6 +8,7 @@
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | [Node](https://nodejs.org/docs/latest/api/)    | Simple and efficient, how to now fall in love with Node 20?                              |
 | [Express](https://expressjs.com/)              | Fast and furious, one of the oldest and fastest                                          |
+| [Docker](https://www.docker.com/)              | Container application solution                                                           |
 | [Prisma](https://www.prisma.io/)               | Database ORM, for me the best in the market for typescript                               |
 | [Postgress](https://www.postgresql.org/)       | What can i say? It is opensource :D                                                      |
 | [Cloudnary](https://cloudinary.com/)           | A service that provide to us the CDN application to save our images                      |
