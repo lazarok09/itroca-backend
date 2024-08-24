@@ -1,19 +1,25 @@
-# Welcome to my first Swagger e-commerce API
+# Welcome to my first Swagger e-commerce API 🗿
+
+<br>
 
 ## About 🕵️
 Have you noticed that almost all front-end engineer gets bored with they stack? I believe is that what makes everybody to inovate and create a new stuff from scratch, like the ton of javascript libraries available.
 
 That was kind of my case. I needed to learn more about some topics like CORS, cookies and raw auth. 
 
-At my early begins i skipped a lot of stuff to get into what i needed to find a job. After a while, i decided to create a back-end with a nice docs and use that as a way to programing outside my job and grow my fullstack skills. 
+At my early begins i skipped a lot of stuff to get into what i needed to find a job.
 
-As a admireer of things done without IA and Youtube, i had ton of fun reading all docs i founded and get a lot frustated when my cookies was not being sended to my client-side. LOL all i needed was to fetch with **credentials ** but i know that now :D
+After a while, i decided to create a back-end with a nice docs and use that as a way to programing outside my job and grow my fullstack skills. 
 
-I hope you enjoy this journey and remember, those who can still learn somenthing new, even when they think they know enough, are the best people to have around.
+As a admireer of things done without IA and Youtube, i had ton of fun reading all docs i founded and get a lot frustated when my cookies was not being sended to my client-side. 
 
-Checkout the [frontend](https://github.com/lazarok09/itroca)
+LOL all i needed was to fetch with **credentials** but i know that now :D
 
-Keep growing 🚀
+I hope you enjoy this journey and remember
+
+those who can still learn somenthing new, even when they think they know enough, are the best people to have around.
+
+Check out the [frontend](https://github.com/lazarok09/itroca)
 
 <h2 id="tecnologias">
  Tec's ⤵️
