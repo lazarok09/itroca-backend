@@ -17,3 +17,5 @@ logs
 
 # Optional: Output of 'npm run build'
 /dist/
+
+.env
