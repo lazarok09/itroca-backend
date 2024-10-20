@@ -50,7 +50,7 @@ app.use(
 // Welcome route
 app.get('/', async (_, res) => {
   res.send(
-    'Welcome to the API, access <a href="http://localhost:3000/api-docs">documentação</a> to more details.',
+    `<div><h1>Welcome to the API</h1><p> Access the <a href=${process.env.PUBLIC_API_URL}/api-docs>docs</a> to more details.</p></div>`,
   );
 });
 
