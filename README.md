@@ -73,6 +73,18 @@ First of all, we are using docker here to build the dev enviroment fast and with
 
 <hr>
 
+# Running first time at Docker
+
+Init the dev migrations
+```
+npx prisma migrate dev --name init
+```
+Pull the database
+```
+ npx prisma db pull
+```
+Then you can access the database to check it out, follow the below instructions.
+
 ### Accessing the database inside docker
 ```
 docker exec -it docker_hash_id bash
