@@ -7,6 +7,7 @@ interface User {
   hash?: string;
   createdAt: Date;
   updatedAt: Date;
+  image: string;
 }
 interface Product {
   id: number;

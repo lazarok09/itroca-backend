@@ -44,6 +44,8 @@ components:
           type: string
         email:
           type: string
+        image:
+          type: string
         age:
           type: integer
         address:

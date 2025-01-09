@@ -34,14 +34,12 @@ class AuthController {
         });
         res.send(result);
       } else {
-        res
-          .status(401)
-          .send(
-            new GenericErrorHandler({
-              message: `Usuário ou senha incorretos`,
-              status: 401,
-            }),
-          );
+        res.status(401).send(
+          new GenericErrorHandler({
+            message: `Usuário ou senha incorretos`,
+            status: 401,
+          }),
+        );
       }
     } catch (e) {
       const treatedError: PrismaErrorShape = e as any;
@@ -81,15 +79,20 @@ class AuthController {
   async signUp(req: Request, res: Response) {
     try {
       const user: AuthUser & { password: string } = req.body;
+      
+      const isEmpty = (value: string) => value && !Boolean(value?.length);
 
       const emptyValues = [
         user.address,
         user.name,
         user.email,
         user.password,
-      ].some((value: string) => !Boolean(value.length));
+        user.image,
+      ].some(isEmpty);
 
       if (!Number.isSafeInteger(user.age) || emptyValues) {
+      console.trace('🚀 ~ AuthController ~ signUp ~ user', user);
+
         res.status(422).send(
           new GenericErrorHandler({
             message:
@@ -105,6 +108,7 @@ class AuthController {
         email: user.email,
         age: user.age,
         password: user.password,
+        image: user.image,
       });
       const signUpResponse = await new AuthModel().signIn(
         user.email,

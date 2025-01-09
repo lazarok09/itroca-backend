@@ -10,5 +10,5 @@ export interface PrismaErrorShape {
 }
 
 export const getPrismaMessage = (shape: PrismaErrorShape): string => {
-  return PrismaError[shape?.code] ?? "Erro não encontrado";
+  return PrismaError[shape?.code] ?? 'Erro não encontrado';
 };

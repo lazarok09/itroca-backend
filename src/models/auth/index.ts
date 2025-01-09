@@ -41,6 +41,7 @@ class AuthModel implements IAuthModel {
           id: searchedUser.id,
           name: searchedUser.name,
           updatedAt: searchedUser.updatedAt,
+          image: searchedUser.image
         };
 
         return { ...user, token: token };
@@ -55,7 +56,7 @@ class AuthModel implements IAuthModel {
     // send to blacklist this user token
     return result;
   }
-  async signUp({ address, age, email, name, password }: SignUpModelProps) {
+  async signUp({ address, age, email, name, password,image }: SignUpModelProps) {
     // create user
     const result = await new UserModel().createUser({
       email,
@@ -63,6 +64,7 @@ class AuthModel implements IAuthModel {
       age,
       name,
       password,
+      image,
     });
     // authenticate this user in the server
     // return the user and the token

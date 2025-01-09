@@ -20,6 +20,7 @@ class UserModel implements IUserModel {
         age: user.age,
         email: user.email,
         name: user.name,
+        image: user.image,
         hash: hash,
       },
     });
@@ -33,6 +34,7 @@ class UserModel implements IUserModel {
       name: createdUser.name,
       updatedAt: createdUser.updatedAt,
       hash: hash,
+      image: createdUser.image
     };
   }
   async findUser({ email }: { email: string }): Promise<User | undefined> {
