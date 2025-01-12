@@ -2,7 +2,8 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
-import { ProductRouter, ProductsRouter } from './router/product';
+import { UserProductRouter, UserProductsRouter } from './router/user-product';
+import { ProductsRouter } from './router/products';
 import { UserRouter } from './router/user';
 import { AuthRouter } from './router/auth';
 
@@ -61,10 +62,12 @@ app.use('/auth', AuthRouter());
 // User
 
 app.use('/user', UserRouter());
-
-// Product
+// Public product
 app.use('/products', ProductsRouter());
-app.use('/product', ProductRouter());
+
+// User Product
+app.use('/user/products', UserProductsRouter());
+app.use('/user/product', UserProductRouter());
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

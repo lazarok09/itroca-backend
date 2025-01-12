@@ -1,40 +1,40 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import ProductController from '../../controllers/product';
+import UserProductController from '../../controllers/user-product';
 
 import { authMiddleware } from '../../middlewares/auth';
 
 const router = express.Router();
 
-export const ProductsRouter = () => {
+export const UserProductsRouter = () => {
   router.get(
     '/',
     cookieParser(),
     authMiddleware,
-    ProductController.getProducts,
+    UserProductController.getProducts,
   );
   router.delete(
     '/',
     cookieParser(),
     authMiddleware,
-    ProductController.deleteProducts,
+    UserProductController.deleteProducts,
   );
   return router;
 };
 
-export const ProductRouter = () => {
+export const UserProductRouter = () => {
   router.get(
     '/:id',
     cookieParser(),
     authMiddleware,
-    ProductController.getProduct,
+    UserProductController.getProduct,
   );
 
   router.delete(
     '/:id',
     cookieParser(),
     authMiddleware,
-    ProductController.getProduct,
+    UserProductController.getProduct,
   );
 
   router.post(
@@ -43,7 +43,7 @@ export const ProductRouter = () => {
     express.json(),
     express.urlencoded({ extended: true }),
     authMiddleware,
-    ProductController.createProduct,
+    UserProductController.createProduct,
   );
 
   router.patch(
@@ -52,7 +52,7 @@ export const ProductRouter = () => {
     express.json(),
     express.urlencoded({ extended: true }),
     authMiddleware,
-    ProductController.updateProduct,
+    UserProductController.updateProduct,
   );
   return router;
 };

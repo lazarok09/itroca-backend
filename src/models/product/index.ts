@@ -10,7 +10,11 @@ interface UpdateProduct extends UserProduct {
 
 interface IProduct {
   getProduct: (id: number, userID: number) => Promise<Product | undefined>;
-  getProducts: (userID: number) => Promise<Product[] | undefined>;
+  getProductsByUserID: (
+    userID: number,
+    queryName?: string,
+  ) => Promise<Product[] | undefined>;
+  getProducts: (queryName?: string) => Promise<Product[] | undefined>;
   updateProduct: (props: UpdateProduct) => Promise<Product | undefined>;
   createProduct: (props: UserProduct) => Promise<Product | undefined>;
   deleteProducts: (userID: number) => Promise<number | undefined>;
@@ -30,7 +34,7 @@ class ProductModel implements IProduct {
       return product;
     }
   }
-  async getProducts(userID: number, queryName?: string) {
+  async getProductsByUserID(userID: number, queryName?: string) {
     const name = Boolean(queryName?.length) ? `${queryName}` : undefined;
 
     const searchedProducts = await (
@@ -38,6 +42,23 @@ class ProductModel implements IProduct {
     ).product.findMany({
       where: {
         userID: userID,
+        name: {
+          search: name,
+        },
+      },
+    });
+
+    if (searchedProducts) {
+      return searchedProducts;
+    }
+  }
+  async getProducts(queryName?: string) {
+    const name = Boolean(queryName?.length) ? `${queryName}` : undefined;
+
+    const searchedProducts = await (
+      await prismaClient()
+    ).product.findMany({
+      where: {
         name: {
           search: name,
         },

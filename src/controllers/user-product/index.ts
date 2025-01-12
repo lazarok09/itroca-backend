@@ -3,7 +3,7 @@ import { ProductEntity, ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
-enum EnumProductControllerErrors {
+export enum EnumProductControllerErrors {
   generic = 'Ocorreu um erro ao validar as informações do produto.',
   attr = 'Verifique os atributos e tente novamente.',
   search = 'Parece que ocorreu um erro durante a busca de produtos.',
@@ -11,7 +11,8 @@ enum EnumProductControllerErrors {
   deleteAll = 'Ocorreu um erro ao apagar os produtos.',
   delete = 'Ocorreu um erro ao apagar este produto.',
 }
-class ProductController {
+
+class UserProductController {
   // receive the request
 
   async getProducts(req: Request, res: Response) {
@@ -19,9 +20,12 @@ class ProductController {
       const customRequest: CustomUserRequest = req as any;
 
       const userID = customRequest.user.data.id;
-      
+
       const name = customRequest.query['name'] as string;
-      const products = await new ProductModel().getProducts(userID, name);
+      const products = await new ProductModel().getProductsByUserID(
+        userID,
+        name,
+      );
       res.status(200).send(products);
     } catch (e) {
       const treatedError = e as PrismaErrorShape;
@@ -224,4 +228,4 @@ class ProductController {
     res.sendStatus(400);
   }
 }
-export default new ProductController();
+export default new UserProductController();
