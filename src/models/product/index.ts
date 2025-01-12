@@ -9,7 +9,11 @@ interface UpdateProduct extends UserProduct {
 }
 
 interface IProduct {
-  getProduct: (id: number, userID: number) => Promise<Product | undefined>;
+  getProductByID: (id: number) => Promise<Product | undefined>;
+  getUserProductByID: (
+    id: number,
+    userID: number,
+  ) => Promise<Product | undefined>;
   getProductsByUserID: (
     userID: number,
     queryName?: string,
@@ -21,13 +25,25 @@ interface IProduct {
   deleteProduct: (id: number, userID: number) => Promise<Product | undefined>;
 }
 class ProductModel implements IProduct {
-  async getProduct(id: number, userID: number) {
+  async getUserProductByID(id: number, userID: number) {
     const product = await (
       await prismaClient()
     ).product.findFirst({
       where: {
         id,
         userID: userID,
+      },
+    });
+    if (product) {
+      return product;
+    }
+  }
+  async getProductByID(id: number) {
+    const product = await (
+      await prismaClient()
+    ).product.findFirst({
+      where: {
+        id,
       },
     });
     if (product) {

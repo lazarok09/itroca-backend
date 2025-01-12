@@ -29,6 +29,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PrismaError'
+  /products/{id}:
+    get:
+      description: Product handler to get product
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+            description: The id of the product
+
+      responses:
+        '200':
+          description: Returns a product.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Prisma error containg  message status prisma error and the error catch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrismaError'
 
 components:
   schemas:

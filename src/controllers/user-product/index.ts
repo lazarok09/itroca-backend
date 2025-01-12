@@ -3,6 +3,7 @@ import { ProductEntity, ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
+
 export enum EnumProductControllerErrors {
   generic = 'Ocorreu um erro ao validar as informações do produto.',
   attr = 'Verifique os atributos e tente novamente.',
@@ -55,7 +56,7 @@ class UserProductController {
     }
 
     try {
-      const product = await new ProductModel().getProduct(
+      const product = await new ProductModel().getUserProductByID(
         Number(productId),
         userID,
       );

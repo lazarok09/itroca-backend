@@ -28,6 +28,26 @@ class ProductsController {
       );
     }
   }
+  async getProductByID(req: Request, res: Response) {
+    try {
+      const customRequest: CustomUserRequest = req as any;
+
+      const id = customRequest.query['id'] as string;
+      const products = await new ProductModel().getProductByID(Number(id));
+
+      res.status(200).send(products);
+    } catch (e) {
+      const treatedError = e as PrismaErrorShape;
+      res.status(400).send(
+        new PrismaErrorHandler({
+          error: e,
+          message: EnumProductControllerErrors.search,
+          prismaMessage: getPrismaMessage(treatedError),
+          status: 400,
+        }),
+      );
+    }
+  }
 }
 
 export default new ProductsController();
