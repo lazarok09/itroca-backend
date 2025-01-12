@@ -33,7 +33,8 @@ paths:
     get:
       description: Product handler to get product
       parameters:
-        - in: query
+        - in: path
+          required: true
           name: id
           schema:
             type: string

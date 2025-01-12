@@ -32,7 +32,7 @@ class ProductsController {
     try {
       const customRequest: CustomUserRequest = req as any;
 
-      const id = customRequest.query['id'] as string;
+      const id = customRequest.params['id'] as string;
       const products = await new ProductModel().getProductByID(Number(id));
 
       res.status(200).send(products);
