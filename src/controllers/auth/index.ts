@@ -59,12 +59,23 @@ class AuthController {
       const token = extractAuthCookieFromRequest(req);
       if (token) {
         const result = await new AuthModel().signOut(token);
+        
+        res.cookie(AUTH_COOKIE_NAME, null, {
+          maxAge: 0,
+          httpOnly: true,
+        });
+
         res.status(200).send(result);
       } else {
         throw token;
       }
     } catch (e) {
       const treatedError: PrismaErrorShape = e as any;
+
+      res.cookie(AUTH_COOKIE_NAME, null, {
+        maxAge: 0,
+        httpOnly: true,
+      });
 
       res.status(400).send(
         new PrismaErrorHandler({
@@ -79,7 +90,7 @@ class AuthController {
   async signUp(req: Request, res: Response) {
     try {
       const user: AuthUser & { password: string } = req.body;
-      
+
       const isEmpty = (value: string) => value && !Boolean(value?.length);
 
       const emptyValues = [
@@ -91,7 +102,7 @@ class AuthController {
       ].some(isEmpty);
 
       if (!Number.isSafeInteger(user.age) || emptyValues) {
-      console.trace('🚀 ~ AuthController ~ signUp ~ user', user);
+        console.trace('🚀 ~ AuthController ~ signUp ~ user', user);
 
         res.status(422).send(
           new GenericErrorHandler({

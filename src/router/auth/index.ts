@@ -12,7 +12,7 @@ export const AuthRouter = () => {
 
   router.post('/signin', AuthController.signIn);
 
-  router.post('/signout', cookieParser(), authMiddleware, AuthController.signOut);
+  router.post('/signout', cookieParser(), AuthController.signOut);
 
   router.use('/signup', express.json());
   router.use('/signup', express.urlencoded({ extended: true }));
