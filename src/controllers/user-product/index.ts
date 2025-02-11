@@ -3,15 +3,7 @@ import { ProductEntity, ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
-
-export enum EnumProductControllerErrors {
-  generic = 'Ocorreu um erro ao validar as informações do produto.',
-  attr = 'Verifique os atributos e tente novamente.',
-  search = 'Parece que ocorreu um erro durante a busca de produtos.',
-  update = 'Parece que ocorreu um erro durante a atualização deste produto.',
-  deleteAll = 'Ocorreu um erro ao apagar os produtos.',
-  delete = 'Ocorreu um erro ao apagar este produto.',
-}
+import { ENUM_PRODUCT_CONTROLLER } from '../../types/dictionary';
 
 class UserProductController {
   // receive the request
@@ -33,7 +25,7 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.search,
+          message: ENUM_PRODUCT_CONTROLLER.SEARCH_PRODUCTS_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -48,7 +40,7 @@ class UserProductController {
     if (!productId?.length || !userID || isNaN(userID)) {
       res.status(422).send(
         new GenericErrorHandler({
-          message: EnumProductControllerErrors.generic,
+          message: ENUM_PRODUCT_CONTROLLER.GENERIC_ERROR,
           status: 422,
         }),
       );
@@ -68,7 +60,7 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: 'Ocorreu um erro na busca do produto',
+          message: ENUM_PRODUCT_CONTROLLER.SEARCH_PRODUCT_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -91,7 +83,7 @@ class UserProductController {
     ) {
       res.status(422).send(
         new GenericErrorHandler({
-          message: EnumProductControllerErrors.generic,
+          message: ENUM_PRODUCT_CONTROLLER.GENERIC_ERROR,
           status: 422,
         }),
       );
@@ -115,7 +107,7 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.update,
+          message: ENUM_PRODUCT_CONTROLLER.UPDATE_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -126,17 +118,24 @@ class UserProductController {
   async createProduct(req: Request, res: Response) {
     try {
       const customRequest: CustomUserRequest = req as any;
+      
+      console.log(
+        '🚀 ~ UserProductController ~ createProduct ~ customRequest:',
+        customRequest,
+      );
 
       const requestBody: ProductEntity = customRequest.body;
+
       if (
-        !requestBody ||
+        !requestBody || (!requestBody?.price) ||
         isNaN(requestBody?.price) ||
         !requestBody?.image?.length ||
         !requestBody?.name?.length
       ) {
         res.status(422).send(
           new GenericErrorHandler({
-            message: 'Ocorreu um erro ao validar as informações do produto',
+            message:
+              ENUM_PRODUCT_CONTROLLER.UNPROCESSABLE_PRODUCT_ENTITY_VALIDATION,
             status: 422,
           }),
         );
@@ -159,7 +158,8 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: 'Parece que ocorreu um erro durante a criação do produto',
+          message:
+            ENUM_PRODUCT_CONTROLLER.UNPROCESSABLE_PRODUCT_ENTITY_CREATION,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -183,7 +183,7 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.deleteAll,
+          message: ENUM_PRODUCT_CONTROLLER.DELETE_ALL_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -201,7 +201,7 @@ class UserProductController {
     if (!productId) {
       res.status(422).send(
         new GenericErrorHandler({
-          message: EnumProductControllerErrors.generic,
+          message: ENUM_PRODUCT_CONTROLLER.GENERIC_ERROR,
           status: 422,
         }),
       );
@@ -220,7 +220,7 @@ class UserProductController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.delete,
+          message: ENUM_PRODUCT_CONTROLLER.DELETE_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),

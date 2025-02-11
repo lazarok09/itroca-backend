@@ -3,6 +3,7 @@ import { UserModel } from '../../models/user';
 import { CustomUserRequest } from '../../types/request';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
+import { ENUM_USER_CONTROLLER } from '../../types/dictionary';
 
 class UserController {
   // receive the request
@@ -20,7 +21,7 @@ class UserController {
         if (!searchedUser) {
           res.status(404).send(
             new GenericErrorHandler({
-              message: 'Usuário não encontrado',
+              message: ENUM_USER_CONTROLLER.USER_NOT_FOUND,
               status: 404,
             }),
           );
@@ -31,7 +32,7 @@ class UserController {
         if (userJWT && userJWT.data.email === searchedUser.email) {
           res.status(200).send(searchedUser);
         } else {
-          throw new Error('Token JWT incorreto');
+          throw new Error(ENUM_USER_CONTROLLER.MIS_LEAD_TOKEN);
         }
       }
     } catch (e) {
@@ -39,7 +40,7 @@ class UserController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: 'Erro durante a busca do usuário',
+          message: ENUM_USER_CONTROLLER.SEARCH_USER_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),

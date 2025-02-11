@@ -3,7 +3,7 @@ import { ProductModel } from '../../models/product';
 import { CustomUserRequest } from '../../types/request';
 import { PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
-import { EnumProductControllerErrors } from '../user-product';
+import { ENUM_PRODUCT_CONTROLLER } from '../../types/dictionary';
 
 class ProductsController {
   // receive the request
@@ -21,7 +21,7 @@ class ProductsController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.search,
+          message: ENUM_PRODUCT_CONTROLLER.SEARCH_PRODUCTS_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),
@@ -41,7 +41,7 @@ class ProductsController {
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: EnumProductControllerErrors.search,
+          message: ENUM_PRODUCT_CONTROLLER.SEARCH_PRODUCT_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),

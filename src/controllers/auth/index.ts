@@ -7,6 +7,7 @@ import {
 import { AUTH_COOKIE_NAME } from '../../lib/jsonwebtoken';
 import { GenericErrorHandler, PrismaErrorHandler } from '../../handlers/error';
 import { PrismaErrorShape, getPrismaMessage } from '../../handlers/prismaerror';
+import { ENUM_AUTH_CONTROLLER } from '../../types/dictionary';
 
 class AuthController {
   // receive the request
@@ -18,7 +19,7 @@ class AuthController {
       if (!email?.length || !password?.length) {
         res.status(422).send(
           new GenericErrorHandler({
-            message: 'Atributo email ou senha não especificados',
+            message: ENUM_AUTH_CONTROLLER.INVALID_REQUEST,
             status: 422,
           }),
         );
@@ -36,7 +37,7 @@ class AuthController {
       } else {
         res.status(401).send(
           new GenericErrorHandler({
-            message: `Usuário ou senha incorretos`,
+            message: ENUM_AUTH_CONTROLLER.INVALID_CREDENTIALS,
             status: 401,
           }),
         );
@@ -49,7 +50,7 @@ class AuthController {
           error: treatedError,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
-          message: 'Ocorreu um erro durante o login do usuário',
+          message: ENUM_AUTH_CONTROLLER.INVALID_CREDENTIALS,
         }),
       );
     }
@@ -59,7 +60,7 @@ class AuthController {
       const token = extractAuthCookieFromRequest(req);
       if (token) {
         const result = await new AuthModel().signOut(token);
-        
+
         res.cookie(AUTH_COOKIE_NAME, null, {
           maxAge: 0,
           httpOnly: true,
@@ -79,7 +80,7 @@ class AuthController {
 
       res.status(400).send(
         new PrismaErrorHandler({
-          message: 'Ocorreu um erro durante o logoff do usuário',
+          message: ENUM_AUTH_CONTROLLER.LOGOFF_ERROR,
           status: 400,
           error: treatedError,
           prismaMessage: getPrismaMessage(treatedError),
@@ -102,12 +103,9 @@ class AuthController {
       ].some(isEmpty);
 
       if (!Number.isSafeInteger(user.age) || emptyValues) {
-        console.trace('🚀 ~ AuthController ~ signUp ~ user', user);
-
         res.status(422).send(
           new GenericErrorHandler({
-            message:
-              'Ocorreu um erro durante o registro. Verifique os atributos novamente.',
+            message: ENUM_AUTH_CONTROLLER.SIGNUP_UNPROCESSABLE_ERROR,
             status: 422,
           }),
         );
@@ -127,12 +125,11 @@ class AuthController {
       );
       res.status(201).send(signUpResponse);
     } catch (e) {
-      console.error('🚀 ~ AuthController ~ signUp ~ e:', e);
       const treatedError: PrismaErrorShape = e as any;
       res.status(400).send(
         new PrismaErrorHandler({
           error: e,
-          message: 'Ocorreu um erro durante o cadastro de um novo usuário',
+          message: ENUM_AUTH_CONTROLLER.SIGNUP_ERROR,
           prismaMessage: getPrismaMessage(treatedError),
           status: 400,
         }),

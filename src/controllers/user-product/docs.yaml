@@ -214,7 +214,7 @@ components:
       properties:
         message:
           type: string
-          example: Ocorreu um erro ao {action}
+          example: An error occurred {action}
         status:
           type: integer
           example: 422
@@ -224,7 +224,7 @@ components:
       properties:
         message:
           type: string
-          example: Ocorreu um erro ao {action}
+          example: An error occurred  {action}
         prismaMessage:
           type: string
         status:
